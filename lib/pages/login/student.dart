@@ -62,11 +62,13 @@ class _StudentLoginState extends State<StudentLogin> {
                       fontSize: 14,
                     ),
                   ),
-                  SizedBox(height: 20),
+                  Expanded(child: Container()),
                   //
                   //
-                  Container(
-                    child: Image.asset("assets/login/users/presentation.png"),
+                  Expanded(
+                    child: Container(
+                      child: Image.asset("assets/login/users/presentation.png"),
+                    ),
                   ),
                   SizedBox(height: 10),
                   ElevatedButton(
@@ -89,10 +91,12 @@ class _StudentLoginState extends State<StudentLogin> {
                   SizedBox(height: 20),
                   //
                   //
-                  Container(
-                    child: Image.asset(
-                      "assets/login/users/audience.png",
-                      width: 128.0,
+                  Expanded(
+                    child: Container(
+                      child: Image.asset(
+                        "assets/login/users/audience.png",
+                        width: 128.0,
+                      ),
                     ),
                   ),
                   SizedBox(height: 10),
@@ -116,8 +120,10 @@ class _StudentLoginState extends State<StudentLogin> {
                   SizedBox(height: 20),
                   //
                   //
-                  Container(
-                    child: Image.asset("assets/login/users/support.png"),
+                  Expanded(
+                    child: Container(
+                      child: Image.asset("assets/login/users/support.png"),
+                    ),
                   ),
                   SizedBox(height: 10),
                   ElevatedButton(
