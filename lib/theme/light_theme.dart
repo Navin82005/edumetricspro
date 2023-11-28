@@ -6,7 +6,7 @@ ThemeData lightTheme = ThemeData(
     background: Color.fromRGBO(119, 67, 219, 1),
     primary: Color.fromRGBO(247, 239, 229, 1),
     secondary: Color.fromRGBO(119, 67, 219, 1),
-    tertiary: Colors.transparent,
+    tertiary: Color.fromRGBO(255, 255, 255, 1),
     error: Colors.red,
   ),
 );

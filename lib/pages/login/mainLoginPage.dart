@@ -71,7 +71,7 @@ class MainLogin extends StatelessWidget {
                   SizedBox(height: 10),
                   ElevatedButton(
                     onPressed: () {
-                      print("Student Login");
+                      Navigator.pushNamed(context, 'studentLogin');
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Theme.of(context).colorScheme.background,

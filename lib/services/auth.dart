@@ -3,7 +3,7 @@ import 'package:edumetricspro/themes/AppConfig.dart';
 import 'package:http/http.dart' as http;
 
 class AuthLogin {
-  static Future<bool> login(
+  static Future<Object> login(
       String mode, String username, String password) async {
     // final url = Uri.parse('${AppConfig.backendUrl}/auth/$mode/login/');
 
@@ -26,9 +26,11 @@ class AuthLogin {
 
       print('Response status: ${response.statusCode}');
       print('Response body: ${response.body}');
+      return response.body;
       // print(response);
     } catch (error) {
-      print('Error: ${error.toString()}');
+      // print('Error: ${error.toString()}');
+      return {'status': 'Unable to connect to server'};
     }
 
     bool status = false;

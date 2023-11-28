@@ -8,6 +8,7 @@ import 'package:edumetricspro/themes/AppConfig.dart';
 import 'package:edumetricspro/themes/LoginPageColors.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:lottie/lottie.dart';
 
 class AdminLogin extends StatefulWidget {
   const AdminLogin({super.key});
@@ -129,7 +130,7 @@ class _AdminLoginState extends State<AdminLogin> {
                           keyboardType: TextInputType.emailAddress,
                           decoration: InputDecoration(
                             //
-                            hintText: "admini@siet.ac.in",
+                            hintText: "admin@siet.ac.in",
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(10.0),
                               borderSide: BorderSide(
@@ -266,8 +267,11 @@ class _AdminLoginState extends State<AdminLogin> {
                                     loading = true;
                                   });
 
-                                  await AuthLogin.login(
+                                  final respose = await AuthLogin.login(
                                       'admin', adminEmail, adminPassword);
+                                  // for (i in respose) {
+
+                                  // }
                                   setState(() {
                                     loading = false;
                                   });
@@ -321,11 +325,12 @@ class _AdminLoginState extends State<AdminLogin> {
           ),
         ),
         if (loading)
-          AnimatedSplashScreen(
-              splash:
-                  Center(child: Icon(Icons.settings_backup_restore_outlined)),
-              splashTransition: SplashTransition.rotationTransition,
-              nextScreen: MainLogin()),
+          Scaffold(
+            backgroundColor: Colors.transparent,
+            body: Center(
+              child: Lottie.asset('assets/loaders/blueCircleLoader.json'),
+            ),
+          ),
       ],
     );
   }
