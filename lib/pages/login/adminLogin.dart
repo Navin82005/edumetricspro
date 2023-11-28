@@ -1,7 +1,8 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, use_build_context_synchronously
 
 import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:edumetricspro/components/FontStyles.dart';
+import 'package:edumetricspro/pages/home/adminHome.dart';
 import 'package:edumetricspro/pages/login/mainLoginPage.dart';
 import 'package:edumetricspro/services/auth.dart';
 import 'package:edumetricspro/themes/AppConfig.dart';
@@ -24,6 +25,7 @@ class _AdminLoginState extends State<AdminLogin> {
   bool isUserValid = true;
   bool isUserPasswordValid = true;
   bool loading = false;
+  bool error = false;
 
   @override
   Widget build(BuildContext context) {
@@ -263,15 +265,38 @@ class _AdminLoginState extends State<AdminLogin> {
                                   setState(() {
                                     isUserPasswordValid = isUserValid = true;
                                   });
+
                                   setState(() {
                                     loading = true;
                                   });
 
-                                  final respose = await AuthLogin.login(
+                                  Map response = await AuthLogin.login(
                                       'admin', adminEmail, adminPassword);
-                                  // for (i in respose) {
+                                  print(response);
+                                  if (response['status'] == 204) {
+                                    setState(() {
+                                      error = true;
+                                    });
+                                  } else if (response['status'] == 401) {
+                                    setState(() {
+                                      isUserPasswordValid = isUserValid = false;
+                                    });
+                                  }
+                                  if (response['status'] == 200) {
+                                    Navigator.pop(context);
+                                    Navigator.pop(context);
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => AdminHome(),
+                                      ),
+                                    );
+                                    setState(() {
+                                      error = false;
+                                      isUserPasswordValid = isUserValid = true;
+                                    });
+                                  }
 
-                                  // }
                                   setState(() {
                                     loading = false;
                                   });
@@ -295,6 +320,17 @@ class _AdminLoginState extends State<AdminLogin> {
                             ),
                           ],
                         ),
+                        if (error)
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 20.0),
+                            child: Center(
+                              child: Text(
+                                "Unable to connect to server",
+                                style: TextStyle(
+                                    color: Theme.of(context).colorScheme.error),
+                              ),
+                            ),
+                          ),
                       ],
                     ),
                   ),

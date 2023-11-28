@@ -1,6 +1,7 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, use_build_context_synchronously
 
 import 'package:edumetricspro/components/FontStyles.dart';
+import 'package:edumetricspro/pages/home/studentHome.dart';
 import 'package:edumetricspro/services/auth.dart';
 import 'package:edumetricspro/themes/AppConfig.dart';
 import 'package:edumetricspro/themes/LoginPageColors.dart';
@@ -20,6 +21,8 @@ class _StudentLoginState extends State<StudentLogin> {
   bool passwordVisibility = true;
   bool isUserValid = true;
   bool isUserPasswordValid = true;
+  bool loading = false;
+  bool error = false;
 
   @override
   Widget build(BuildContext context) {
@@ -227,7 +230,7 @@ class _StudentLoginState extends State<StudentLogin> {
                             backgroundColor:
                                 Theme.of(context).colorScheme.background,
                           ),
-                          onPressed: () {
+                          onPressed: () async {
                             if (!studentEmail.contains('@')) {
                               setState(
                                 () {
@@ -257,8 +260,41 @@ class _StudentLoginState extends State<StudentLogin> {
                               setState(() {
                                 isUserPasswordValid = isUserValid = true;
                               });
-                              AuthLogin.login(
+
+                              setState(() {
+                                loading = true;
+                              });
+
+                              Map response = await AuthLogin.login(
                                   'student', studentEmail, studentPassword);
+                              print(response);
+                              if (response['status'] == 204) {
+                                setState(() {
+                                  error = true;
+                                });
+                              } else if (response['status'] == 401) {
+                                setState(() {
+                                  isUserPasswordValid = isUserValid = false;
+                                });
+                              }
+                              if (response['status'] == 200) {
+                                Navigator.pop(context);
+                                Navigator.pop(context);
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => StudentHome(),
+                                  ),
+                                );
+                                setState(() {
+                                  error = false;
+                                  isUserPasswordValid = isUserValid = true;
+                                });
+                              }
+
+                              setState(() {
+                                loading = false;
+                              });
                             }
                           },
 
