@@ -35,10 +35,10 @@ class _StaffLoginState extends State<StaffLogin> {
       ),
       child: Scaffold(
         resizeToAvoidBottomInset: false,
-        backgroundColor: Colors.transparent,
+        backgroundColor: Theme.of(context).colorScheme.tertiary,
         // resizeToAvoidBottomInset: false,
         appBar: AppBar(
-          backgroundColor: LoginPageColors.primaryColor,
+          backgroundColor: Theme.of(context).colorScheme.background,
           leading: IconButton(
             padding: EdgeInsets.zero,
             onPressed: () {
@@ -70,7 +70,7 @@ class _StaffLoginState extends State<StaffLogin> {
                 style: GoogleFonts.poppins(
                   textStyle: TextStyle(
                     fontSize: 20,
-                    color: LoginPageColors.primaryColor,
+                    color: Theme.of(context).colorScheme.secondary,
                     fontWeight: FontWeight.w700,
                   ),
                 ),
@@ -93,7 +93,7 @@ class _StaffLoginState extends State<StaffLogin> {
               style: GoogleFonts.poppins(
                 textStyle: TextStyle(
                   fontSize: 30,
-                  color: LoginPageColors.primaryColor,
+                  color: Theme.of(context).colorScheme.secondary,
                   fontWeight: FontWeight.w600,
                 ),
               ),
@@ -112,7 +112,7 @@ class _StaffLoginState extends State<StaffLogin> {
                       style: GoogleFonts.poppins(
                         textStyle: TextStyle(
                           fontSize: 15,
-                          color: LoginPageColors.primaryColor,
+                          color: Theme.of(context).colorScheme.secondary,
                           fontWeight: FontWeight.w500,
                         ),
                       ),
@@ -124,15 +124,16 @@ class _StaffLoginState extends State<StaffLogin> {
                       keyboardType: TextInputType.emailAddress,
                       decoration: InputDecoration(
                         //
+                        hintText: "name@siet.ac.in",
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10.0),
-                          borderSide:
-                              BorderSide(color: LoginPageColors.primaryColor),
+                          borderSide: BorderSide(
+                              color: Theme.of(context).colorScheme.secondary),
                         ),
                         //
                         prefixIcon: Icon(
                           Icons.person,
-                          color: LoginPageColors.primaryColor,
+                          color: Theme.of(context).colorScheme.secondary,
                         ),
                         //
                       ),
@@ -145,7 +146,7 @@ class _StaffLoginState extends State<StaffLogin> {
                       !isUserValid ? "Please provide valid username" : "",
                       style: GoogleFonts.poppins(
                         textStyle: TextStyle(
-                          color: Colors.red,
+                          color: Theme.of(context).colorScheme.error,
                         ),
                       ),
                     ),
@@ -157,7 +158,7 @@ class _StaffLoginState extends State<StaffLogin> {
                       style: GoogleFonts.poppins(
                         textStyle: TextStyle(
                           fontSize: 15,
-                          color: LoginPageColors.primaryColor,
+                          color: Theme.of(context).colorScheme.secondary,
                           fontWeight: FontWeight.w500,
                         ),
                       ),
@@ -167,16 +168,17 @@ class _StaffLoginState extends State<StaffLogin> {
                     ),
                     TextField(
                       decoration: InputDecoration(
+                        hintText: "mypassword",
                         //
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10.0),
-                          borderSide:
-                              BorderSide(color: LoginPageColors.primaryColor),
+                          borderSide: BorderSide(
+                              color: Theme.of(context).colorScheme.secondary),
                         ),
                         //
                         prefixIcon: Icon(
                           Icons.lock,
-                          color: LoginPageColors.primaryColor,
+                          color: Theme.of(context).colorScheme.secondary,
                         ),
                         //
                         suffixIcon: IconButton(
@@ -190,7 +192,7 @@ class _StaffLoginState extends State<StaffLogin> {
                           icon: Icon(passwordVisibility
                               ? Icons.visibility_off
                               : Icons.visibility),
-                          color: LoginPageColors.primaryColor,
+                          color: Theme.of(context).colorScheme.secondary,
                         ),
                       ),
                       onChanged: (value) {
@@ -204,7 +206,7 @@ class _StaffLoginState extends State<StaffLogin> {
                         "Please provide valid password",
                         style: GoogleFonts.poppins(
                           textStyle: TextStyle(
-                            color: Colors.red,
+                            color: Theme.of(context).colorScheme.error,
                           ),
                         ),
                       ),
@@ -222,7 +224,8 @@ class _StaffLoginState extends State<StaffLogin> {
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(5.0),
                             ),
-                            backgroundColor: LoginPageColors.secondaryColor,
+                            backgroundColor:
+                                Theme.of(context).colorScheme.background,
                           ),
                           onPressed: () {
                             if (!staffEmail.contains('@')) {
@@ -286,7 +289,7 @@ class _StaffLoginState extends State<StaffLogin> {
             Expanded(child: SizedBox()),
 
             Container(
-              color: LoginPageColors.blackColor,
+              color: Theme.of(context).colorScheme.background,
               padding: EdgeInsets.all(5.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -294,7 +297,7 @@ class _StaffLoginState extends State<StaffLogin> {
                   Text(
                     "Forgot Password, contact the admin",
                     style: TextStyle(
-                      color: LoginPageColors.backgroundColor,
+                      color: Theme.of(context).colorScheme.primary,
                       fontSize: 12,
                     ),
                   ),

@@ -13,7 +13,7 @@ class MainLogin extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: LoginPageColors.primaryColor,
+        backgroundColor: Theme.of(context).colorScheme.background,
         title: Text(
           AppConfig.appName,
           style: AppFonts.fontPoppins,
@@ -39,7 +39,7 @@ class MainLogin extends StatelessWidget {
             ),
           ),
           Scaffold(
-            backgroundColor: Colors.transparent,
+            backgroundColor: Theme.of(context).colorScheme.tertiary,
             body: Center(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -49,7 +49,7 @@ class MainLogin extends StatelessWidget {
                   Text(
                     "Welcome to EduMatricsPro",
                     style: TextStyle(
-                      color: LoginPageColors.primaryColor,
+                      color: Theme.of(context).colorScheme.secondary,
                       fontSize: 20,
                       fontWeight: FontWeight.w900,
                     ),
@@ -57,7 +57,7 @@ class MainLogin extends StatelessWidget {
                   Text(
                     "Continue to app after login",
                     style: TextStyle(
-                      color: LoginPageColors.primaryColor,
+                      color: Theme.of(context).colorScheme.secondary,
                       fontSize: 14,
                       fontWeight: FontWeight.w500,
                     ),
@@ -74,7 +74,7 @@ class MainLogin extends StatelessWidget {
                       print("Student Login");
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: LoginPageColors.primaryColor,
+                      backgroundColor: Theme.of(context).colorScheme.background,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(5),
                       ),
@@ -82,7 +82,7 @@ class MainLogin extends StatelessWidget {
                     child: Text(
                       "STUDENT",
                       style: TextStyle(
-                        color: LoginPageColors.backgroundColor,
+                        color: Theme.of(context).colorScheme.primary,
                       ),
                     ),
                   ),
@@ -101,7 +101,7 @@ class MainLogin extends StatelessWidget {
                       Navigator.pushNamed(context, 'staffLogin');
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: LoginPageColors.primaryColor,
+                      backgroundColor: Theme.of(context).colorScheme.background,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(5),
                       ),
@@ -109,7 +109,7 @@ class MainLogin extends StatelessWidget {
                     child: Text(
                       "LECTURER",
                       style: TextStyle(
-                        color: LoginPageColors.backgroundColor,
+                        color: Theme.of(context).colorScheme.primary,
                       ),
                     ),
                   ),
@@ -123,9 +123,10 @@ class MainLogin extends StatelessWidget {
                   ElevatedButton(
                     onPressed: () {
                       print("Admin Login");
+                      Navigator.pushNamed(context, 'adminLogin');
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: LoginPageColors.primaryColor,
+                      backgroundColor: Theme.of(context).colorScheme.background,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(5),
                       ),
@@ -133,7 +134,7 @@ class MainLogin extends StatelessWidget {
                     child: Text(
                       "ADMIN",
                       style: TextStyle(
-                        color: LoginPageColors.backgroundColor,
+                        color: Theme.of(context).colorScheme.primary,
                       ),
                     ),
                   ),
@@ -144,8 +145,10 @@ class MainLogin extends StatelessWidget {
                       height: 120.0,
                     ),
                   ),
+
+                  // FOOTER
                   Container(
-                    color: LoginPageColors.blackColor,
+                    color: Theme.of(context).colorScheme.background,
                     padding: EdgeInsets.all(5.0),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -153,7 +156,7 @@ class MainLogin extends StatelessWidget {
                         Text(
                           "Don't have an account, contact the admin",
                           style: TextStyle(
-                            color: LoginPageColors.backgroundColor,
+                            color: Theme.of(context).colorScheme.primary,
                             fontSize: 12,
                           ),
                         ),
