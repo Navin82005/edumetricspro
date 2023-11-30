@@ -10,6 +10,8 @@ import 'package:edumetricspro/themes/LoginPageColors.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 class AdminLogin extends StatefulWidget {
   const AdminLogin({super.key});
@@ -26,6 +28,10 @@ class _AdminLoginState extends State<AdminLogin> {
   bool isUserPasswordValid = true;
   bool loading = false;
   bool error = false;
+
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -279,6 +285,7 @@ class _AdminLoginState extends State<AdminLogin> {
                                     });
                                   } else if (response['status'] == 401) {
                                     setState(() {
+                                      error = false;
                                       isUserPasswordValid = isUserValid = false;
                                     });
                                   }

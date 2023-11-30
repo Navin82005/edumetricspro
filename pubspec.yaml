@@ -41,6 +41,8 @@ dependencies:
   shared_preferences: ^2.2.2
   animated_splash_screen: ^1.3.0
   lottie: ^2.7.0
+  hive:
+  hive_flutter:
 
 dev_dependencies:
   flutter_test:

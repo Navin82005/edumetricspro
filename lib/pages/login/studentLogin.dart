@@ -279,6 +279,7 @@ class _StudentLoginState extends State<StudentLogin> {
                                     });
                                   } else if (response['status'] == 401) {
                                     setState(() {
+                                      error = false;
                                       isUserPasswordValid = isUserValid = false;
                                     });
                                   }
@@ -320,6 +321,17 @@ class _StudentLoginState extends State<StudentLogin> {
                             ),
                           ],
                         ),
+                        if (error)
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 20.0),
+                            child: Center(
+                              child: Text(
+                                "Unable to connect to server",
+                                style: TextStyle(
+                                    color: Theme.of(context).colorScheme.error),
+                              ),
+                            ),
+                          ),
                       ],
                     ),
                   ),

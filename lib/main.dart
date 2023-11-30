@@ -1,5 +1,8 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, curly_braces_in_flow_control_structures
 
+import 'package:edumetricspro/pages/home/adminHome.dart';
+import 'package:edumetricspro/pages/home/staffHome.dart';
+import 'package:edumetricspro/pages/home/studentHome.dart';
 import 'package:edumetricspro/pages/login/adminLogin.dart';
 import 'package:edumetricspro/pages/login/mainLoginPage.dart';
 import 'package:edumetricspro/pages/login/staffLogin.dart';
@@ -7,8 +10,32 @@ import 'package:edumetricspro/pages/login/studentLogin.dart';
 import 'package:edumetricspro/theme/dark_theme.dart';
 import 'package:edumetricspro/theme/light_theme.dart';
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
-void main() {
+void main() async {
+  await Hive.initFlutter();
+  Box loginBox = await Hive.openBox('Login');
+
+  // await loginBox.clear();
+
+  var isLogedin = loginBox.get('login');
+  var userType = loginBox.get('type');
+  print(loginBox.get('refresh'));
+
+  late var runapp;
+
+  if (isLogedin != null) {
+    if (userType == 'staff')
+      runapp = StaffHome();
+    else if (userType == 'admin')
+      runapp = AdminHome();
+    else if (userType == 'student') runapp = StudentHome();
+  }
+  if (isLogedin == null) {
+    runapp = MainLogin();
+  }
+
   runApp(
     MaterialApp(
       debugShowCheckedModeBanner: false,
@@ -21,7 +48,7 @@ void main() {
         'adminLogin': (context) => AdminLogin(),
         'studentLogin': (context) => StudentLogin(),
       },
-      home: MainLogin(),
+      home: runapp,
     ),
   );
 }

@@ -1,11 +1,15 @@
 import 'dart:convert';
 import 'package:edumetricspro/themes/AppConfig.dart';
 import 'package:http/http.dart' as http;
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 class AuthLogin {
   static Future<Map> login(
       String mode, String username, String password) async {
     // final url = Uri.parse('${AppConfig.backendUrl}/auth/$mode/login/');
+
+    Box loginBox = await Hive.openBox('Login');
 
     try {
       final response = await http.post(
@@ -26,11 +30,12 @@ class AuthLogin {
 
       print('Response status: ${response.statusCode}');
       print('Response body: ${response.body}');
-      // return Map(response.body);
-      // print(response);
       if (response.statusCode == 401) {
         return {'status': 401};
       } else if (response.statusCode == 200) {
+        loginBox.put('type', mode);
+        loginBox.put('login', true);
+        loginBox.put('refresh', json.decode(response.body)['refresh']);
         var parsedBody = json.decode(response.body);
         parsedBody['status'] = 200;
         return parsedBody;
