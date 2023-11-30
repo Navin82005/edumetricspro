@@ -10,6 +10,7 @@ class AuthLogin {
     // final url = Uri.parse('${AppConfig.backendUrl}/auth/$mode/login/');
 
     Box loginBox = await Hive.openBox('Login');
+    Box userData = await Hive.openBox('userData');
 
     try {
       final response = await http.post(
@@ -28,17 +29,24 @@ class AuthLogin {
       // );
       //
 
-      print('Response status: ${response.statusCode}');
-      print('Response body: ${response.body}');
+      // print('Response status: ${response.statusCode}');
+      // print('Response body: ${response.body}');
       if (response.statusCode == 401) {
         return {'status': 401};
       } else if (response.statusCode == 200) {
+        var decodedBody = json.decode(response.body);
         loginBox.put('type', mode);
         loginBox.put('login', true);
-        loginBox.put('refresh', json.decode(response.body)['refresh']);
-        var parsedBody = json.decode(response.body);
-        parsedBody['status'] = 200;
-        return parsedBody;
+        loginBox.put('refresh', decodedBody['refresh']);
+
+        var userBody = decodedBody['userData'];
+        userData.put('name', userBody['name']);
+        userData.put('username', userBody['username']);
+
+        if (mode == 'staff') userData.put('isAdvisor', userBody['isAdvisor']);
+
+        decodedBody['status'] = 200;
+        return decodedBody;
       }
       return {'status': 204};
     } catch (error) {
