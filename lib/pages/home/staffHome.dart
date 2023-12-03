@@ -14,8 +14,9 @@ class _StaffHomeState extends State<StaffHome> {
   late Map localData;
   late Box userDataBox;
   bool loading = true;
-  var staffName;
-  var staffMode;
+  var staffName = '';
+  var staffMode = false;
+  String dropdown = '';
 
   @override
   void initState() {
@@ -41,15 +42,193 @@ class _StaffHomeState extends State<StaffHome> {
         backgroundColor: Theme.of(context).colorScheme.background,
         title: const Text(
           "EduMatricsPro",
+          style: TextStyle(
+            fontFamily: 'Poppins',
+          ),
         ),
         actions: [
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20.0),
             child: Text(
               staffName.toString(),
+              style: const TextStyle(
+                fontFamily: 'Poppins',
+              ),
             ),
           ),
         ],
+      ),
+      drawer: Drawer(
+        child: ListView(
+          children: [
+            // const Expanded(child: SizedBox()),
+            TextButton(
+              style: ButtonStyle(
+                shape: MaterialStateProperty.all<OutlinedBorder>(
+                  const BeveledRectangleBorder(),
+                ),
+              ),
+              onPressed: () {
+                setState(
+                  () {
+                    if (dropdown == 'about-me') {
+                      dropdown = '';
+                    } else {
+                      dropdown = 'about-me';
+                    }
+                  },
+                );
+              },
+              child: const Padding(
+                padding: EdgeInsets.symmetric(vertical: 10.0),
+                child: Text("About Me"),
+              ),
+            ),
+            if (dropdown == 'about-me')
+              Column(
+                children: [
+                  TextButton(
+                    style: ButtonStyle(
+                      shape: MaterialStateProperty.all<OutlinedBorder>(
+                        const BeveledRectangleBorder(),
+                      ),
+                    ),
+                    onPressed: () {},
+                    child: const Padding(
+                      padding: EdgeInsets.symmetric(vertical: 10.0),
+                      child: Text(
+                        "Change Password",
+                        style: TextStyle(
+                          color: Color.fromRGBO(255, 255, 255, .5),
+                          // backgroundColor: Color.fromRGBO(50, 50, 50, 1),
+                        ),
+                      ),
+                    ),
+                  ),
+                  TextButton(
+                    style: ButtonStyle(
+                      shape: MaterialStateProperty.all<OutlinedBorder>(
+                        const BeveledRectangleBorder(),
+                      ),
+                    ),
+                    onPressed: () {},
+                    child: const Padding(
+                      padding: EdgeInsets.symmetric(vertical: 10.0),
+                      child: Text(
+                        "Edit Profile",
+                        style: TextStyle(
+                          color: Color.fromRGBO(255, 255, 255, .5),
+                          // backgroundColor: Color.fromRGBO(50, 50, 50, 1),
+                        ),
+                      ),
+                    ),
+                  ),
+                  TextButton(
+                    style: ButtonStyle(
+                      shape: MaterialStateProperty.all<OutlinedBorder>(
+                        const BeveledRectangleBorder(),
+                      ),
+                    ),
+                    onPressed: () {},
+                    child: const Padding(
+                      padding: EdgeInsets.symmetric(vertical: 10.0),
+                      child: Text(
+                        "Change Profile Picture",
+                        style: TextStyle(
+                          color: Color.fromRGBO(255, 255, 255, .5),
+                          // backgroundColor: Color.fromRGBO(50, 50, 50, 1),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            TextButton(
+              style: ButtonStyle(
+                shape: MaterialStateProperty.all<OutlinedBorder>(
+                  const BeveledRectangleBorder(),
+                ),
+              ),
+              onPressed: () {},
+              child: const Padding(
+                padding: EdgeInsets.symmetric(vertical: 10.0),
+                child: Text("Take Attendance"),
+              ),
+            ),
+            TextButton(
+              style: ButtonStyle(
+                shape: MaterialStateProperty.all<OutlinedBorder>(
+                  const BeveledRectangleBorder(),
+                ),
+              ),
+              onPressed: () {},
+              child: const Padding(
+                padding: EdgeInsets.symmetric(vertical: 10.0),
+                child: Text("View Current Slot"),
+              ),
+            ),
+            if (staffMode)
+              TextButton(
+                style: ButtonStyle(
+                  shape: MaterialStateProperty.all<OutlinedBorder>(
+                    const BeveledRectangleBorder(),
+                  ),
+                ),
+                onPressed: () {
+                  setState(
+                    () {
+                      if (dropdown == 'my-class') {
+                        dropdown = '';
+                      } else {
+                        dropdown = 'my-class';
+                      }
+                    },
+                  );
+                },
+                child: const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 10.0),
+                  child: Text("My Class"),
+                ),
+              ),
+            if (dropdown == 'my-class')
+              Column(
+                children: [
+                  TextButton(
+                    style: ButtonStyle(
+                      shape: MaterialStateProperty.all<OutlinedBorder>(
+                        const BeveledRectangleBorder(),
+                      ),
+                    ),
+                    onPressed: () {},
+                    child: const Padding(
+                      padding: EdgeInsets.symmetric(vertical: 10.0),
+                      child: Text(
+                        "See Students",
+                        style:
+                            TextStyle(color: Color.fromRGBO(255, 255, 255, .5)),
+                      ),
+                    ),
+                  ),
+                  TextButton(
+                    style: ButtonStyle(
+                      shape: MaterialStateProperty.all<OutlinedBorder>(
+                        const BeveledRectangleBorder(),
+                      ),
+                    ),
+                    onPressed: () {},
+                    child: const Padding(
+                      padding: EdgeInsets.symmetric(vertical: 10.0),
+                      child: Text(
+                        "Change Attendance",
+                        style:
+                            TextStyle(color: Color.fromRGBO(255, 255, 255, .5)),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+          ],
+        ),
       ),
       body: (loading)
           ? Scaffold(
@@ -84,11 +263,26 @@ class _StaffHomeState extends State<StaffHome> {
                           stops: [0, 0.2, 0.5, 0.8],
                         ),
                       ),
-                      child: const Text(
-                        "Attendance",
-                        style: TextStyle(
-                          fontFamily: 'Poppins',
-                        ),
+                      child: const Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 10.0),
+                            child: Image(
+                              image: AssetImage(
+                                  'assets/home/staff/attendance.png'),
+                              height: 40.0,
+                            ),
+                          ),
+                          Text(
+                            "Attendance",
+                            style: TextStyle(
+                              fontFamily: 'Poppins',
+                              fontSize: 25.0,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                     const Expanded(child: SizedBox()),
@@ -109,7 +303,27 @@ class _StaffHomeState extends State<StaffHome> {
                           stops: [0, 0.2, 0.5, 0.8],
                         ),
                       ),
-                      child: const Text("Time Table"),
+                      child: const Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 10.0),
+                            child: Image(
+                              image: AssetImage(
+                                  'assets/home/staff/time-table.png'),
+                              height: 40.0,
+                            ),
+                          ),
+                          Text(
+                            "Time Table",
+                            style: TextStyle(
+                              fontFamily: 'Poppins',
+                              fontSize: 25.0,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                     if (staffMode) const Expanded(child: SizedBox()),
                     if (staffMode)
@@ -131,7 +345,27 @@ class _StaffHomeState extends State<StaffHome> {
                             stops: [0, 0.2, 0.5, 0.8],
                           ),
                         ),
-                        child: const Text("My Class"),
+                        child: const Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 10.0),
+                              child: Image(
+                                image: AssetImage(
+                                    'assets/home/staff/my-class.png'),
+                                height: 40.0,
+                              ),
+                            ),
+                            Text(
+                              "My Class",
+                              style: TextStyle(
+                                fontFamily: 'Poppins',
+                                fontSize: 25.0,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     const Expanded(child: SizedBox()),
                     Container(
@@ -151,7 +385,27 @@ class _StaffHomeState extends State<StaffHome> {
                           stops: [0, 0.2, 0.5, 0.8],
                         ),
                       ),
-                      child: const Text("About Me"),
+                      child: const Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 10.0),
+                            child: Image(
+                              image:
+                                  AssetImage('assets/home/staff/about-me.png'),
+                              height: 40.0,
+                            ),
+                          ),
+                          Text(
+                            "About Me",
+                            style: TextStyle(
+                              fontFamily: 'Poppins',
+                              fontSize: 25.0,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                     const Expanded(child: SizedBox()),
                   ],
