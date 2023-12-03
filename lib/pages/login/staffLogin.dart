@@ -347,7 +347,7 @@ class _StaffLoginState extends State<StaffLogin> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        "Forgot Password, contact the staff",
+                        "Forgot Password, contact the admin",
                         style: TextStyle(
                           color: Theme.of(context).colorScheme.primary,
                           fontSize: 12,
