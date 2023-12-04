@@ -2,9 +2,7 @@
 
 import 'package:edumetricspro/components/FontStyles.dart';
 import 'package:edumetricspro/themes/AppConfig.dart';
-import 'package:edumetricspro/themes/LoginPageColors.dart';
 import "package:flutter/material.dart";
-import 'package:google_fonts/google_fonts.dart';
 
 class MainLogin extends StatelessWidget {
   const MainLogin({super.key});

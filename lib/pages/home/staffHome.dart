@@ -1,7 +1,11 @@
+import 'package:edumetricspro/animations/navigationAnimation.dart';
+import 'package:edumetricspro/components/staff/menuDrawer.dart';
+import 'package:edumetricspro/pages/attendance/attendanceTaker.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:hive/hive.dart';
 import 'package:lottie/lottie.dart';
+import 'package:shimmer/shimmer.dart';
 
 class StaffHome extends StatefulWidget {
   const StaffHome({super.key});
@@ -28,7 +32,7 @@ class _StaffHomeState extends State<StaffHome> {
     userDataBox = await Hive.openBox('userData');
     setState(() {
       staffName = (userDataBox.get('name'));
-      staffMode = userDataBox.get('isAdvisor') == '1' ? true : false;
+      staffMode = userDataBox.get('isAdvisor');
       loading = false;
     });
     print(userDataBox.get('username'));
@@ -58,183 +62,77 @@ class _StaffHomeState extends State<StaffHome> {
           ),
         ],
       ),
-      drawer: Drawer(
-        child: ListView(
-          children: [
-            // const Expanded(child: SizedBox()),
-            TextButton(
-              style: ButtonStyle(
-                shape: MaterialStateProperty.all<OutlinedBorder>(
-                  const BeveledRectangleBorder(),
-                ),
-              ),
-              onPressed: () {
-                setState(
-                  () {
-                    if (dropdown == 'about-me') {
-                      dropdown = '';
-                    } else {
-                      dropdown = 'about-me';
-                    }
-                  },
-                );
-              },
-              child: const Padding(
-                padding: EdgeInsets.symmetric(vertical: 10.0),
-                child: Text("About Me"),
-              ),
-            ),
-            if (dropdown == 'about-me')
-              Column(
-                children: [
-                  TextButton(
-                    style: ButtonStyle(
-                      shape: MaterialStateProperty.all<OutlinedBorder>(
-                        const BeveledRectangleBorder(),
-                      ),
-                    ),
-                    onPressed: () {},
-                    child: const Padding(
-                      padding: EdgeInsets.symmetric(vertical: 10.0),
-                      child: Text(
-                        "Change Password",
-                        style: TextStyle(
-                          color: Color.fromRGBO(255, 255, 255, .5),
-                          // backgroundColor: Color.fromRGBO(50, 50, 50, 1),
-                        ),
-                      ),
-                    ),
-                  ),
-                  TextButton(
-                    style: ButtonStyle(
-                      shape: MaterialStateProperty.all<OutlinedBorder>(
-                        const BeveledRectangleBorder(),
-                      ),
-                    ),
-                    onPressed: () {},
-                    child: const Padding(
-                      padding: EdgeInsets.symmetric(vertical: 10.0),
-                      child: Text(
-                        "Edit Profile",
-                        style: TextStyle(
-                          color: Color.fromRGBO(255, 255, 255, .5),
-                          // backgroundColor: Color.fromRGBO(50, 50, 50, 1),
-                        ),
-                      ),
-                    ),
-                  ),
-                  TextButton(
-                    style: ButtonStyle(
-                      shape: MaterialStateProperty.all<OutlinedBorder>(
-                        const BeveledRectangleBorder(),
-                      ),
-                    ),
-                    onPressed: () {},
-                    child: const Padding(
-                      padding: EdgeInsets.symmetric(vertical: 10.0),
-                      child: Text(
-                        "Change Profile Picture",
-                        style: TextStyle(
-                          color: Color.fromRGBO(255, 255, 255, .5),
-                          // backgroundColor: Color.fromRGBO(50, 50, 50, 1),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            TextButton(
-              style: ButtonStyle(
-                shape: MaterialStateProperty.all<OutlinedBorder>(
-                  const BeveledRectangleBorder(),
-                ),
-              ),
-              onPressed: () {},
-              child: const Padding(
-                padding: EdgeInsets.symmetric(vertical: 10.0),
-                child: Text("Take Attendance"),
-              ),
-            ),
-            TextButton(
-              style: ButtonStyle(
-                shape: MaterialStateProperty.all<OutlinedBorder>(
-                  const BeveledRectangleBorder(),
-                ),
-              ),
-              onPressed: () {},
-              child: const Padding(
-                padding: EdgeInsets.symmetric(vertical: 10.0),
-                child: Text("View Current Slot"),
-              ),
-            ),
-            if (staffMode)
-              TextButton(
-                style: ButtonStyle(
-                  shape: MaterialStateProperty.all<OutlinedBorder>(
-                    const BeveledRectangleBorder(),
-                  ),
-                ),
-                onPressed: () {
-                  setState(
-                    () {
-                      if (dropdown == 'my-class') {
-                        dropdown = '';
-                      } else {
-                        dropdown = 'my-class';
-                      }
-                    },
-                  );
-                },
-                child: const Padding(
-                  padding: EdgeInsets.symmetric(vertical: 10.0),
-                  child: Text("My Class"),
-                ),
-              ),
-            if (dropdown == 'my-class')
-              Column(
-                children: [
-                  TextButton(
-                    style: ButtonStyle(
-                      shape: MaterialStateProperty.all<OutlinedBorder>(
-                        const BeveledRectangleBorder(),
-                      ),
-                    ),
-                    onPressed: () {},
-                    child: const Padding(
-                      padding: EdgeInsets.symmetric(vertical: 10.0),
-                      child: Text(
-                        "See Students",
-                        style:
-                            TextStyle(color: Color.fromRGBO(255, 255, 255, .5)),
-                      ),
-                    ),
-                  ),
-                  TextButton(
-                    style: ButtonStyle(
-                      shape: MaterialStateProperty.all<OutlinedBorder>(
-                        const BeveledRectangleBorder(),
-                      ),
-                    ),
-                    onPressed: () {},
-                    child: const Padding(
-                      padding: EdgeInsets.symmetric(vertical: 10.0),
-                      child: Text(
-                        "Change Attendance",
-                        style:
-                            TextStyle(color: Color.fromRGBO(255, 255, 255, .5)),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-          ],
-        ),
-      ),
+      drawer: const StaffMenu(),
       body: (loading)
-          ? Scaffold(
-              backgroundColor: Theme.of(context).colorScheme.tertiary,
-              body: Center(
-                child: Lottie.asset('assets/loaders/blueCircleLoader.json'),
+          ? Shimmer.fromColors(
+              baseColor: Colors.grey.shade300,
+              highlightColor: Colors.white70,
+              enabled: true,
+              child: SingleChildScrollView(
+                physics: const NeverScrollableScrollPhysics(),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 30.0),
+                  child: Column(
+                    children: [
+                      ListView.builder(
+                        itemCount: 4,
+                        shrinkWrap: true,
+                        itemBuilder: (context, index) {
+                          return Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 25.0),
+                            child: Container(
+                              height: 100,
+                              width: double.maxFinite,
+                              decoration: const BoxDecoration(
+                                borderRadius:
+                                    (BorderRadius.all(Radius.circular(10.0))),
+                                gradient: LinearGradient(
+                                  colors: [
+                                    Colors.orange,
+                                    Colors.orangeAccent,
+                                    Colors.red,
+                                    Colors.redAccent
+                                  ],
+                                  begin: Alignment.topLeft,
+                                  end: Alignment.bottomRight,
+                                  stops: [0, 0.2, 0.5, 0.8],
+                                ),
+                              ),
+                              child: const Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Padding(
+                                    padding:
+                                        EdgeInsets.symmetric(horizontal: 10.0),
+                                    child: Image(
+                                      image: AssetImage(
+                                          'assets/home/staff/attendance.png'),
+                                      height: 40.0,
+                                    ),
+                                  ),
+                                  Text(
+                                    "Attendance",
+                                    style: TextStyle(
+                                      fontFamily: 'Poppins',
+                                      fontSize: 25.0,
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding:
+                                        EdgeInsets.symmetric(horizontal: 20.0),
+                                    child:
+                                        Icon(Icons.arrow_forward_ios_rounded),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    ],
+                  ),
+                ),
               ),
             )
           : Scaffold(
@@ -246,88 +144,12 @@ class _StaffHomeState extends State<StaffHome> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     const Expanded(child: SizedBox()),
-                    Container(
-                      height: 100,
-                      width: double.maxFinite,
-                      decoration: const BoxDecoration(
-                        borderRadius: (BorderRadius.all(Radius.circular(10.0))),
-                        gradient: LinearGradient(
-                          colors: [
-                            Colors.orange,
-                            Colors.orangeAccent,
-                            Colors.red,
-                            Colors.redAccent
-                          ],
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                          stops: [0, 0.2, 0.5, 0.8],
-                        ),
-                      ),
-                      child: const Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 10.0),
-                            child: Image(
-                              image: AssetImage(
-                                  'assets/home/staff/attendance.png'),
-                              height: 40.0,
-                            ),
-                          ),
-                          Text(
-                            "Attendance",
-                            style: TextStyle(
-                              fontFamily: 'Poppins',
-                              fontSize: 25.0,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    const Expanded(child: SizedBox()),
-                    Container(
-                      height: 100,
-                      width: double.maxFinite,
-                      decoration: const BoxDecoration(
-                        borderRadius: (BorderRadius.all(Radius.circular(10.0))),
-                        gradient: LinearGradient(
-                          colors: [
-                            Colors.green,
-                            Colors.greenAccent,
-                            Colors.teal,
-                            Colors.tealAccent,
-                          ],
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                          stops: [0, 0.2, 0.5, 0.8],
-                        ),
-                      ),
-                      child: const Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 10.0),
-                            child: Image(
-                              image: AssetImage(
-                                  'assets/home/staff/time-table.png'),
-                              height: 40.0,
-                            ),
-                          ),
-                          Text(
-                            "Time Table",
-                            style: TextStyle(
-                              fontFamily: 'Poppins',
-                              fontSize: 25.0,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    if (staffMode) const Expanded(child: SizedBox()),
-                    if (staffMode)
-                      Container(
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.of(context)
+                            .push(SlideLiftRoute(child: AttendanceTaker()));
+                      },
+                      child: Container(
                         height: 100,
                         width: double.maxFinite,
                         decoration: const BoxDecoration(
@@ -335,10 +157,10 @@ class _StaffHomeState extends State<StaffHome> {
                               (BorderRadius.all(Radius.circular(10.0))),
                           gradient: LinearGradient(
                             colors: [
-                              Colors.pink,
-                              Colors.pinkAccent,
-                              Colors.deepPurple,
-                              Colors.deepPurpleAccent,
+                              Colors.orange,
+                              Colors.orange,
+                              Colors.red,
+                              Colors.red
                             ],
                             begin: Alignment.topLeft,
                             end: Alignment.bottomRight,
@@ -353,58 +175,174 @@ class _StaffHomeState extends State<StaffHome> {
                               padding: EdgeInsets.symmetric(horizontal: 10.0),
                               child: Image(
                                 image: AssetImage(
-                                    'assets/home/staff/my-class.png'),
+                                    'assets/home/staff/attendance.png'),
                                 height: 40.0,
                               ),
                             ),
                             Text(
-                              "My Class",
+                              "Attendance",
                               style: TextStyle(
                                 fontFamily: 'Poppins',
                                 fontSize: 25.0,
                               ),
                             ),
+                            Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 20.0),
+                              child: Icon(Icons.arrow_forward_ios_rounded),
+                            ),
                           ],
+                        ),
+                      ),
+                    ),
+                    const Expanded(child: SizedBox()),
+                    GestureDetector(
+                      onTap: () {
+                        print("Viewing Timetable");
+                      },
+                      child: Container(
+                        height: 100,
+                        width: double.maxFinite,
+                        decoration: const BoxDecoration(
+                          borderRadius:
+                              (BorderRadius.all(Radius.circular(10.0))),
+                          gradient: LinearGradient(
+                            colors: [
+                              Colors.green,
+                              Colors.green,
+                              Colors.teal,
+                              Colors.teal,
+                            ],
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                            stops: [0, 0.2, 0.5, 0.8],
+                          ),
+                        ),
+                        child: const Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 10.0),
+                              child: Image(
+                                image: AssetImage(
+                                    'assets/home/staff/time-table.png'),
+                                height: 40.0,
+                              ),
+                            ),
+                            Text(
+                              "Time Table",
+                              style: TextStyle(
+                                fontFamily: 'Poppins',
+                                fontSize: 25.0,
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 20.0),
+                              child: Icon(Icons.arrow_forward_ios_rounded),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    if (staffMode) const Expanded(child: SizedBox()),
+                    if (staffMode)
+                      GestureDetector(
+                        onTap: () {
+                          print("My Class");
+                        },
+                        child: Container(
+                          height: 100,
+                          width: double.maxFinite,
+                          decoration: const BoxDecoration(
+                            borderRadius:
+                                (BorderRadius.all(Radius.circular(10.0))),
+                            gradient: LinearGradient(
+                              colors: [
+                                Colors.pink,
+                                Colors.pink,
+                                Colors.deepPurple,
+                                Colors.deepPurple,
+                              ],
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                              stops: [0, 0.2, 0.5, 0.8],
+                            ),
+                          ),
+                          child: const Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 10.0),
+                                child: Image(
+                                  image: AssetImage(
+                                      'assets/home/staff/my-class.png'),
+                                  height: 40.0,
+                                ),
+                              ),
+                              Text(
+                                "My Class",
+                                style: TextStyle(
+                                  fontFamily: 'Poppins',
+                                  fontSize: 25.0,
+                                ),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 20.0),
+                                child: Icon(Icons.arrow_forward_ios_rounded),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     const Expanded(child: SizedBox()),
-                    Container(
-                      height: 100,
-                      width: double.maxFinite,
-                      decoration: const BoxDecoration(
-                        borderRadius: (BorderRadius.all(Radius.circular(10.0))),
-                        gradient: LinearGradient(
-                          colors: [
-                            Colors.blue,
-                            Colors.blueAccent,
-                            Colors.lightBlue,
-                            Colors.lightBlueAccent,
-                          ],
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                          stops: [0, 0.2, 0.5, 0.8],
+                    GestureDetector(
+                      onTap: () {
+                        print("About Me");
+                      },
+                      child: Container(
+                        height: 100,
+                        width: double.maxFinite,
+                        decoration: const BoxDecoration(
+                          borderRadius:
+                              (BorderRadius.all(Radius.circular(10.0))),
+                          gradient: LinearGradient(
+                            colors: [
+                              Colors.blue,
+                              Colors.blue,
+                              Colors.lightBlue,
+                              Colors.lightBlue,
+                            ],
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                            stops: [0, 0.2, 0.5, 0.8],
+                          ),
                         ),
-                      ),
-                      child: const Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 10.0),
-                            child: Image(
-                              image:
-                                  AssetImage('assets/home/staff/about-me.png'),
-                              height: 40.0,
+                        child: const Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 10.0),
+                              child: Image(
+                                image: AssetImage(
+                                    'assets/home/staff/about-me.png'),
+                                height: 40.0,
+                              ),
                             ),
-                          ),
-                          Text(
-                            "About Me",
-                            style: TextStyle(
-                              fontFamily: 'Poppins',
-                              fontSize: 25.0,
+                            Text(
+                              "About Me",
+                              style: TextStyle(
+                                fontFamily: 'Poppins',
+                                fontSize: 25.0,
+                              ),
                             ),
-                          ),
-                        ],
+                            Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 20.0),
+                              child: Icon(Icons.arrow_forward_ios_rounded),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                     const Expanded(child: SizedBox()),

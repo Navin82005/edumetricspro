@@ -43,6 +43,7 @@ dependencies:
   lottie: ^2.7.0
   hive:
   hive_flutter:
+  shimmer: ^3.0.0
 
 dev_dependencies:
   flutter_test:

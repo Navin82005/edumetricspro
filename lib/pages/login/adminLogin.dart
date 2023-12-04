@@ -1,17 +1,13 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, use_build_context_synchronously
 
-import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:edumetricspro/components/FontStyles.dart';
 import 'package:edumetricspro/pages/home/adminHome.dart';
-import 'package:edumetricspro/pages/login/mainLoginPage.dart';
 import 'package:edumetricspro/services/auth.dart';
 import 'package:edumetricspro/themes/AppConfig.dart';
 import 'package:edumetricspro/themes/LoginPageColors.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
-import 'package:hive/hive.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 
 class AdminLogin extends StatefulWidget {
   const AdminLogin({super.key});

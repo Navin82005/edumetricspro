@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors, curly_braces_in_flow_control_structures
 
+import 'package:edumetricspro/pages/attendance/attendanceTaker.dart';
 import 'package:edumetricspro/pages/home/adminHome.dart';
 import 'package:edumetricspro/pages/home/staffHome.dart';
 import 'package:edumetricspro/pages/home/studentHome.dart';
@@ -47,8 +48,9 @@ void main() async {
         'staffLogin': (context) => StaffLogin(),
         'adminLogin': (context) => AdminLogin(),
         'studentLogin': (context) => StudentLogin(),
+        'takeAttendance': (context) => AttendanceTaker(),
       },
-      home: runapp,
+      home: AttendanceTaker(),
     ),
   );
 }
