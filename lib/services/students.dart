@@ -20,10 +20,9 @@ class Students {
 }
 
 Future<dynamic> get_students_data(String class_) async {
-  var parsedUrl = Uri.parse("${AppConfig.backendUrl}/attendance/");
-  // http://127.0.0.1:8000/attendance/?lh=2-CSE-B
-
   try {
+    var parsedUrl = Uri.parse("${AppConfig.backendUrl}/attendance/");
+    // http://127.0.0.1:8000/attendance/?lh=2-CSE-B
     var response = await http.post(
       parsedUrl,
       body: {
@@ -61,9 +60,6 @@ Future<dynamic> get_students_data(String class_) async {
     return students;
   } catch (e) {
     print(e);
-    return http.Response(
-      '{"message": "$e"}',
-      401,
-    );
+    return {"message": "Unable to get data"};
   }
 }

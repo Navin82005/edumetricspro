@@ -45,6 +45,27 @@ class _AttendanceSheetState extends State<AttendanceSheet> {
         "isPresent": false,
         "isOD": false,
       },
+      {
+        "name": "Temp1",
+        "class": "Temp2",
+        "rollNumber": "Temp3",
+        "isPresent": false,
+        "isOD": false,
+      },
+      {
+        "name": "Temp1",
+        "class": "Temp2",
+        "rollNumber": "Temp3",
+        "isPresent": false,
+        "isOD": false,
+      },
+      {
+        "name": "Temp1",
+        "class": "Temp2",
+        "rollNumber": "Temp3",
+        "isPresent": false,
+        "isOD": false,
+      },
     ].map(
       (studentData) {
         return Students(
@@ -58,8 +79,10 @@ class _AttendanceSheetState extends State<AttendanceSheet> {
     ),
   ).toList();
 
-  int numberOfStudent = 2;
+  int numberOfStudent = 5;
   bool loading = true;
+  var data;
+  bool error = false;
 
   @override
   void initState() {
@@ -69,7 +92,16 @@ class _AttendanceSheetState extends State<AttendanceSheet> {
   }
 
   loadBackendData() async {
-    var data = await get_students_data(widget.className);
+    data = await get_students_data(widget.className);
+    print(data);
+    try {
+      if (data['message'] == "Unable to get data") {
+        setState(() {
+          error = true;
+        });
+        return;
+      }
+    } catch (e) {}
     // var data1 = json.decode(data.body);
     // var decoded = json.decode(data1['body']);
 
@@ -82,6 +114,7 @@ class _AttendanceSheetState extends State<AttendanceSheet> {
     setState(() {
       // numberOfStudent = studentsNames.length;
       studentsNames = data;
+      data = data;
       numberOfStudent = data.length;
       print(numberOfStudent);
       loading = false;
@@ -121,58 +154,73 @@ class _AttendanceSheetState extends State<AttendanceSheet> {
       ),
       drawer: StaffMenu(),
       body: (loading)
-          ? Shimmer.fromColors(
-              baseColor: Colors.grey.shade50,
-              highlightColor: Colors.white70,
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(0, 30.0, 0, 30.0),
-                child: ListView.builder(
-                  itemCount: numberOfStudent,
-                  itemBuilder: (context, index) {
-                    return Padding(
-                      padding: const EdgeInsets.fromLTRB(30.0, 1.0, 30.0, 1.0),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(5),
-                          color: Theme.of(context).colorScheme.background,
-                        ),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            // Spacer(),
-                            Container(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text(
-                                studentsNames[index].rollNumber,
-                                style: const TextStyle(
-                                  fontFamily: 'Poppins',
-                                  color: Colors.white,
-                                ),
-                              ),
+          ? (!error)
+              ? Shimmer.fromColors(
+                  baseColor: Colors.white70,
+                  highlightColor: Colors.white30,
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(0, 30.0, 0, 30.0),
+                    child: ListView.builder(
+                      itemCount: numberOfStudent,
+                      itemBuilder: (context, index) {
+                        return Padding(
+                          padding:
+                              const EdgeInsets.fromLTRB(30.0, 1.0, 30.0, 1.0),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(5),
+                              color: Theme.of(context).colorScheme.background,
                             ),
-                            Spacer(),
-                            Container(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text(
-                                studentsNames[index].name,
-                                style: const TextStyle(
-                                  fontFamily: 'Poppins',
-                                  color: Colors.white70,
-                                  fontSize: 12.0,
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                // Spacer(),
+                                Container(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(
+                                    studentsNames[index].rollNumber,
+                                    style: const TextStyle(
+                                      fontFamily: 'Poppins',
+                                      color: Colors.white,
+                                    ),
+                                  ),
                                 ),
-                              ),
+                                Spacer(),
+                                Container(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(
+                                    studentsNames[index].name,
+                                    style: const TextStyle(
+                                      fontFamily: 'Poppins',
+                                      color: Colors.white70,
+                                      fontSize: 12.0,
+                                    ),
+                                  ),
+                                ),
+                                // const Spacer(),
+                                AttendanceCheckBox(isChecked: true),
+                              ],
                             ),
-                            // const Spacer(),
-                            AttendanceCheckBox(isChecked: true),
-                          ],
-                        ),
-                      ),
-                    );
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                )
+              : RefreshIndicator(
+                  onRefresh: () async {
+                    print("object");
                   },
-                ),
-              ),
-            )
+                  child: Center(
+                    child: Text(
+                      "Unable to Get data from database.\nPlease check your internet connection and try again.",
+                      style: TextStyle(
+                        fontFamily: 'Poppins',
+                      ),
+                    ),
+                  ),
+                )
           : Form(
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(0, 30.0, 0, 30.0),
