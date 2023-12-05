@@ -146,8 +146,8 @@ class _StaffHomeState extends State<StaffHome> {
                     const Expanded(child: SizedBox()),
                     GestureDetector(
                       onTap: () {
-                        Navigator.of(context)
-                            .push(SlideLiftRoute(child: AttendanceTaker()));
+                        Navigator.of(context).push(
+                            SlideLiftRoute(child: const AttendanceTaker()));
                       },
                       child: Container(
                         height: 100,

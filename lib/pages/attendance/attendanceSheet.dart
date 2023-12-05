@@ -22,25 +22,43 @@ class AttendanceSheet extends StatefulWidget {
 }
 
 class _AttendanceSheetState extends State<AttendanceSheet> {
-  List<dynamic> studentsNames = [
-    ['Student', 'rollNumber'],
-    ['Student', 'rollNumber'],
-    ['Student', 'rollNumber'],
-    ['Student', 'rollNumber'],
-    ['Student', 'rollNumber'],
-    ['Student', 'rollNumber'],
-    ['Student', 'rollNumber'],
-    ['Student', 'rollNumber'],
-    ['Student', 'rollNumber'],
-    ['Student', 'rollNumber'],
-    ['Student', 'rollNumber'],
-    ['Student', 'rollNumber'],
-    ['Student', 'rollNumber'],
-    ['Student', 'rollNumber'],
-    ['Student', 'rollNumber'],
-  ];
+  var studentsNames = List<Students>.from(
+    [
+      {
+        "name": "Temp1",
+        "class": "Temp2",
+        "rollNumber": "Temp3",
+        "isPresent": false,
+        "isOD": false,
+      },
+      {
+        "name": "Temp1",
+        "class": "Temp2",
+        "rollNumber": "Temp3",
+        "isPresent": false,
+        "isOD": false,
+      },
+      {
+        "name": "Temp1",
+        "class": "Temp2",
+        "rollNumber": "Temp3",
+        "isPresent": false,
+        "isOD": false,
+      },
+    ].map(
+      (studentData) {
+        return Students(
+          "Name",
+          "X CSE - X",
+          'rollNumber',
+          false,
+          false,
+        );
+      },
+    ),
+  ).toList();
 
-  int numberOfStudent = 15;
+  int numberOfStudent = 2;
   bool loading = true;
 
   @override
@@ -52,17 +70,20 @@ class _AttendanceSheetState extends State<AttendanceSheet> {
 
   loadBackendData() async {
     var data = await get_students_data(widget.className);
-    var data1 = json.decode(data.body);
-    var decoded = json.decode(data1['body']);
+    // var data1 = json.decode(data.body);
+    // var decoded = json.decode(data1['body']);
 
     // studentsNames = data1['body'] as List<List>;
     // for (var i in data1['body']) {
     //   print(i);
     // }
     // print(studentsNames.elementAt(0));
+    // print(data);
     setState(() {
-      studentsNames = decoded;
-      numberOfStudent = studentsNames.length;
+      // numberOfStudent = studentsNames.length;
+      studentsNames = data;
+      numberOfStudent = data.length;
+      print(numberOfStudent);
       loading = false;
     });
   }
@@ -116,23 +137,25 @@ class _AttendanceSheetState extends State<AttendanceSheet> {
                           color: Theme.of(context).colorScheme.background,
                         ),
                         child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          mainAxisAlignment: MainAxisAlignment.end,
                           children: [
+                            // Spacer(),
                             Container(
                               padding: const EdgeInsets.all(8.0),
                               child: Text(
-                                // studentsNames[index][0],
-                                "Name",
+                                studentsNames[index].rollNumber,
                                 style: const TextStyle(
                                   fontFamily: 'Poppins',
                                   color: Colors.white,
                                 ),
                               ),
                             ),
+                            Spacer(),
                             Container(
                               padding: const EdgeInsets.all(8.0),
                               child: Text(
-                                // studentsNames[index][0],
-                                "Name",
+                                studentsNames[index].name,
                                 style: const TextStyle(
                                   fontFamily: 'Poppins',
                                   color: Colors.white70,
@@ -140,9 +163,8 @@ class _AttendanceSheetState extends State<AttendanceSheet> {
                                 ),
                               ),
                             ),
-                            const Spacer(),
-                            AttendanceCheckBox(
-                                isChecked: studentsNames[index][2]),
+                            // const Spacer(),
+                            AttendanceCheckBox(isChecked: true),
                           ],
                         ),
                       ),
@@ -151,55 +173,80 @@ class _AttendanceSheetState extends State<AttendanceSheet> {
                 ),
               ),
             )
-          : Padding(
-              padding: const EdgeInsets.fromLTRB(0, 30.0, 0, 30.0),
-              child: ListView.builder(
-                itemCount: numberOfStudent,
-                itemBuilder: (context, index) {
-                  return Padding(
-                    padding: const EdgeInsets.fromLTRB(30.0, 1.0, 30.0, 1.0),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(5),
-                        color: Theme.of(context).colorScheme.background,
-                      ),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          // Spacer(),
-                          Container(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              studentsNames[index][0],
-                              style: const TextStyle(
-                                fontFamily: 'Poppins',
-                                color: Colors.white,
+          : Form(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(0, 30.0, 0, 30.0),
+                child: ListView.builder(
+                  itemCount: numberOfStudent,
+                  itemBuilder: (context, index) {
+                    return Padding(
+                      padding: const EdgeInsets.fromLTRB(30.0, 1.0, 30.0, 1.0),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(5),
+                          color: Theme.of(context).colorScheme.background,
+                        ),
+                        child: GestureDetector(
+                          onTap: () {
+                            putAttendance(
+                              index,
+                              !studentsNames[index].isPresent,
+                            );
+                          },
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              // Spacer(),
+                              Container(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(
+                                  studentsNames[index].name,
+                                  style: const TextStyle(
+                                    fontFamily: 'Poppins',
+                                    color: Colors.white,
+                                  ),
+                                ),
                               ),
-                            ),
-                          ),
-                          Spacer(),
-                          Container(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              studentsNames[index][1],
-                              style: const TextStyle(
-                                fontFamily: 'Poppins',
-                                color: Colors.white70,
-                                fontSize: 12.0,
+                              Spacer(),
+                              Container(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(
+                                  studentsNames[index].rollNumber,
+                                  style: const TextStyle(
+                                    fontFamily: 'Poppins',
+                                    color: Colors.white70,
+                                    fontSize: 12.0,
+                                  ),
+                                ),
                               ),
-                            ),
+                              // const Spacer(),
+                              Checkbox(
+                                value: studentsNames[index].isPresent,
+                                onChanged: (newBool) {
+                                  putAttendance(index, newBool);
+                                },
+                              ),
+                            ],
                           ),
-                          // const Spacer(),
-                          AttendanceCheckBox(
-                              isChecked: studentsNames[index][2]),
-                        ],
+                        ),
                       ),
-                    ),
-                  );
-                },
+                    );
+                  },
+                ),
               ),
             ),
+    );
+  }
+
+  void putAttendance(int index, bool? newBool) {
+    return setState(
+      () {
+        studentsNames[index].isPresent = newBool!;
+        // for (var element in studentsNames) {
+        //   print("${element.name} ${element.isPresent}");
+        // }
+      },
     );
   }
 }
