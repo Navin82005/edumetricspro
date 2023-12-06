@@ -7,6 +7,7 @@ import 'package:edumetricspro/components/staff/menuDrawer.dart';
 import 'package:edumetricspro/services/students.dart';
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 
 class AttendanceSheet extends StatefulWidget {
   final classIndex;
@@ -92,6 +93,9 @@ class _AttendanceSheetState extends State<AttendanceSheet> {
   }
 
   loadBackendData() async {
+    setState(() {
+      loading = true;
+    });
     data = await get_students_data(widget.className);
     print(data);
     try {
@@ -99,6 +103,7 @@ class _AttendanceSheetState extends State<AttendanceSheet> {
         setState(() {
           error = true;
         });
+        print(error);
         return;
       }
     } catch (e) {}
@@ -119,6 +124,10 @@ class _AttendanceSheetState extends State<AttendanceSheet> {
       print(numberOfStudent);
       loading = false;
     });
+  }
+
+  Future<void> _refresh() async {
+    return await loadBackendData();
   }
 
   @override
@@ -155,132 +164,169 @@ class _AttendanceSheetState extends State<AttendanceSheet> {
       drawer: StaffMenu(),
       body: (loading)
           ? (!error)
-              ? Shimmer.fromColors(
-                  baseColor: Colors.white70,
-                  highlightColor: Colors.white30,
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(0, 30.0, 0, 30.0),
-                    child: ListView.builder(
-                      itemCount: numberOfStudent,
-                      itemBuilder: (context, index) {
-                        return Padding(
-                          padding:
-                              const EdgeInsets.fromLTRB(30.0, 1.0, 30.0, 1.0),
-                          child: Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(5),
-                              color: Theme.of(context).colorScheme.background,
-                            ),
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.end,
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                // Spacer(),
-                                Container(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Text(
-                                    studentsNames[index].rollNumber,
-                                    style: const TextStyle(
-                                      fontFamily: 'Poppins',
-                                      color: Colors.white,
+              ? LiquidPullToRefresh(
+                  onRefresh: () => _refresh(),
+                  animSpeedFactor: 5,
+                  showChildOpacityTransition: false,
+                  child: Shimmer.fromColors(
+                    baseColor: Colors.white70,
+                    highlightColor: Colors.white30,
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(0, 30.0, 0, 30.0),
+                      child: ListView.builder(
+                        itemCount: numberOfStudent,
+                        itemBuilder: (context, index) {
+                          return Padding(
+                            padding:
+                                const EdgeInsets.fromLTRB(30.0, 1.0, 30.0, 1.0),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(5),
+                                color: Theme.of(context).colorScheme.background,
+                              ),
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  // Spacer(),
+                                  Container(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(
+                                      studentsNames[index].rollNumber,
+                                      style: const TextStyle(
+                                        fontFamily: 'Poppins',
+                                        color: Colors.white,
+                                      ),
                                     ),
                                   ),
-                                ),
-                                Spacer(),
-                                Container(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Text(
-                                    studentsNames[index].name,
-                                    style: const TextStyle(
-                                      fontFamily: 'Poppins',
-                                      color: Colors.white70,
-                                      fontSize: 12.0,
+                                  Spacer(),
+                                  Container(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(
+                                      studentsNames[index].name,
+                                      style: const TextStyle(
+                                        fontFamily: 'Poppins',
+                                        color: Colors.white70,
+                                        fontSize: 12.0,
+                                      ),
                                     ),
                                   ),
-                                ),
-                                // const Spacer(),
-                                AttendanceCheckBox(isChecked: true),
-                              ],
+                                  // const Spacer(),
+                                  AttendanceCheckBox(isChecked: true),
+                                ],
+                              ),
                             ),
-                          ),
-                        );
-                      },
-                    ),
-                  ),
-                )
-              : RefreshIndicator(
-                  onRefresh: () async {
-                    print("object");
-                  },
-                  child: Center(
-                    child: Text(
-                      "Unable to Get data from database.\nPlease check your internet connection and try again.",
-                      style: TextStyle(
-                        fontFamily: 'Poppins',
+                          );
+                        },
                       ),
                     ),
                   ),
                 )
-          : Form(
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(0, 30.0, 0, 30.0),
-                child: ListView.builder(
-                  itemCount: numberOfStudent,
-                  itemBuilder: (context, index) {
-                    return Padding(
-                      padding: const EdgeInsets.fromLTRB(30.0, 1.0, 30.0, 1.0),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(5),
-                          color: Theme.of(context).colorScheme.background,
+              : LiquidPullToRefresh(
+                  onRefresh: () => _refresh(),
+                  animSpeedFactor: 5,
+                  showChildOpacityTransition: false,
+                  child: ListView(
+                    children: const [
+                      Text(
+                        "Unable to Get data from database\nPlease check your internet connection and try again.",
+                        style: TextStyle(
+                          fontFamily: 'Poppins',
                         ),
-                        child: GestureDetector(
-                          onTap: () {
-                            putAttendance(
-                              index,
-                              !studentsNames[index].isPresent,
+                      ),
+                    ],
+                  ),
+                )
+          : LiquidPullToRefresh(
+              onRefresh: () => _refresh(),
+              animSpeedFactor: 5,
+              showChildOpacityTransition: false,
+              child: Form(
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(0, 30.0, 0, 30.0),
+                  child: Column(
+                    children: [
+                      Expanded(
+                        child: ListView.builder(
+                          itemCount: numberOfStudent,
+                          itemBuilder: (context, index) {
+                            return Padding(
+                              padding: const EdgeInsets.fromLTRB(
+                                  30.0, 1.0, 30.0, 1.0),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(5),
+                                  color:
+                                      Theme.of(context).colorScheme.background,
+                                ),
+                                child: GestureDetector(
+                                  onTap: () {
+                                    putAttendance(
+                                      index,
+                                      !studentsNames[index].isPresent,
+                                    );
+                                  },
+                                  child: Row(
+                                    crossAxisAlignment: CrossAxisAlignment.end,
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      // Spacer(),
+                                      Container(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Text(
+                                          studentsNames[index].name,
+                                          style: const TextStyle(
+                                            fontFamily: 'Poppins',
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                      ),
+                                      Expanded(child: SizedBox()),
+                                      Container(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Text(
+                                          studentsNames[index].rollNumber,
+                                          style: const TextStyle(
+                                            fontFamily: 'Poppins',
+                                            color: Colors.white70,
+                                            fontSize: 12.0,
+                                          ),
+                                        ),
+                                      ),
+                                      // const Spacer(),
+                                      Checkbox(
+                                        value: studentsNames[index].isPresent,
+                                        onChanged: (newBool) {
+                                          putAttendance(index, newBool);
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
                             );
                           },
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              // Spacer(),
-                              Container(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Text(
-                                  studentsNames[index].name,
-                                  style: const TextStyle(
-                                    fontFamily: 'Poppins',
-                                    color: Colors.white,
-                                  ),
-                                ),
-                              ),
-                              Spacer(),
-                              Container(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Text(
-                                  studentsNames[index].rollNumber,
-                                  style: const TextStyle(
-                                    fontFamily: 'Poppins',
-                                    color: Colors.white70,
-                                    fontSize: 12.0,
-                                  ),
-                                ),
-                              ),
-                              // const Spacer(),
-                              Checkbox(
-                                value: studentsNames[index].isPresent,
-                                onChanged: (newBool) {
-                                  putAttendance(index, newBool);
-                                },
-                              ),
-                            ],
+                        ),
+                      ),
+                      SizedBox(
+                        height: 20.0,
+                      ),
+                      ElevatedButton(
+                        onPressed: () {},
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all<Color>(
+                            Theme.of(context).colorScheme.background,
+                          ),
+                        ),
+                        child: Text(
+                          "Save Attendance",
+                          style: TextStyle(
+                            fontFamily: 'Poppins',
                           ),
                         ),
                       ),
-                    );
-                  },
+                    ],
+                  ),
                 ),
               ),
             ),
