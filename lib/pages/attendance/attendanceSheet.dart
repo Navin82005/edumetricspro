@@ -23,6 +23,8 @@ class AttendanceSheet extends StatefulWidget {
 }
 
 class _AttendanceSheetState extends State<AttendanceSheet> {
+  List<bool> AttendanceList = [];
+
   var studentsNames = List<Students>.from(
     [
       {
@@ -98,6 +100,10 @@ class _AttendanceSheetState extends State<AttendanceSheet> {
     });
     data = await get_students_data(widget.className);
     print(data);
+    AttendanceList = [];
+    for (Students i in data) {
+      AttendanceList.add(i.isPresent);
+    }
     try {
       if (data['message'] == "Unable to get data") {
         setState(() {
@@ -261,10 +267,12 @@ class _AttendanceSheetState extends State<AttendanceSheet> {
                                 ),
                                 child: GestureDetector(
                                   onTap: () {
-                                    putAttendance(
-                                      index,
-                                      !studentsNames[index].isPresent,
-                                    );
+                                    setState(() {
+                                      studentsNames[index].isPresent =
+                                          !studentsNames[index].isPresent;
+                                      AttendanceList[index] =
+                                          studentsNames[index].isPresent;
+                                    });
                                   },
                                   child: Row(
                                     crossAxisAlignment: CrossAxisAlignment.end,
