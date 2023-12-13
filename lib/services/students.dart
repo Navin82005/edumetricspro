@@ -57,7 +57,7 @@ Future<dynamic> get_students_data(String class_) async {
       stud.display();
     }
 
-    return students;
+    return {'students': students};
   } catch (e) {
     print(e);
     return {"message": "Unable to get data"};

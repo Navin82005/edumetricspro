@@ -99,11 +99,9 @@ class _AttendanceSheetState extends State<AttendanceSheet> {
       loading = true;
     });
     data = await get_students_data(widget.className);
-    print(data);
+    print(data['students']);
     AttendanceList = [];
-    for (Students i in data) {
-      AttendanceList.add(i.isPresent);
-    }
+
     try {
       if (data['message'] == "Unable to get data") {
         setState(() {
@@ -122,11 +120,17 @@ class _AttendanceSheetState extends State<AttendanceSheet> {
     // }
     // print(studentsNames.elementAt(0));
     // print(data);
+    var rawData = data['students'];
+
+    for (Students i in rawData) {
+      AttendanceList.add(i.isPresent);
+    }
+
     setState(() {
       // numberOfStudent = studentsNames.length;
-      studentsNames = data;
+      studentsNames = data['students'];
       data = data;
-      numberOfStudent = data.length;
+      numberOfStudent = studentsNames.length;
       print(numberOfStudent);
       loading = false;
     });
