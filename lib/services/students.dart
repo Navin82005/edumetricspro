@@ -17,6 +17,16 @@ class Students {
   void display() {
     print("$name $rollNumber $_class $isPresent ");
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'name': name,
+      'class': _class,
+      'rollNumber': rollNumber,
+      'isPresent': isPresent,
+      'isOD': isOD
+    };
+  }
 }
 
 Future<dynamic> get_students_data(String class_) async {
@@ -61,5 +71,32 @@ Future<dynamic> get_students_data(String class_) async {
   } catch (e) {
     print(e);
     return {"message": "Unable to get data"};
+  }
+}
+
+Future<void> sendStudentData(List<Students> students, String class_) async {
+  var parsedUrl = Uri.parse('${AppConfig.backendUrl}/attendance/mark/$class_/');
+
+  // String jsonData = jsonEncode(students);
+  // print(jsonData);
+
+  List<Map<String, dynamic>> jsonList =
+      students.map((student) => student.toJson()).toList();
+
+  var jsonData = jsonEncode(jsonList);
+
+  print(jsonData);
+
+  try {
+    var response = await http.post(
+      parsedUrl,
+      headers: {
+        'content-type': 'application/json',
+      },
+      body: jsonData,
+    );
+    print(response.body);
+  } catch (e) {
+    print(e);
   }
 }

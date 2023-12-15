@@ -324,7 +324,9 @@ class _AttendanceSheetState extends State<AttendanceSheet> {
                         height: 20.0,
                       ),
                       ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          sendStudentData(studentsNames, widget.className);
+                        },
                         style: ButtonStyle(
                           backgroundColor: MaterialStateProperty.all<Color>(
                             Theme.of(context).colorScheme.background,
