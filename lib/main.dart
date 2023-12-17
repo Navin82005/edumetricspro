@@ -50,6 +50,7 @@ void main() async {
         'studentLogin': (context) => StudentLogin(),
         'takeAttendance': (context) => AttendanceTaker(),
       },
+      // home: AttendanceTaker(),
       home: runapp,
     ),
   );

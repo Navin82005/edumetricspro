@@ -29,9 +29,9 @@ class Students {
   }
 }
 
-Future<dynamic> get_students_data(String class_) async {
+Future<dynamic> get_students_data(String class_, String time_) async {
   try {
-    var parsedUrl = Uri.parse("${AppConfig.backendUrl}/attendance/");
+    var parsedUrl = Uri.parse("${AppConfig.backendUrl}/attendance/$time_");
     // http://127.0.0.1:8000/attendance/?lh=2-CSE-B
     var response = await http.post(
       parsedUrl,
@@ -46,11 +46,12 @@ Future<dynamic> get_students_data(String class_) async {
     // // List<Students> students = List<Students>();
     // print(decoded);
 
-    var data1 = json.decode(response.body)['body'];
-    print(data1[0]['name']);
+    var rawData = json.decode(response.body)['body'];
+    var period_ = rawData['period'];
+    // print(rawData['data'][0]['name']);
 
     List<Students> students = List<Students>.from(
-      data1.map(
+      rawData['data'].map(
         (studentData) {
           return Students(
             studentData['name'],
@@ -63,19 +64,21 @@ Future<dynamic> get_students_data(String class_) async {
       ),
     );
 
-    for (var stud in students) {
-      stud.display();
-    }
+    // for (var stud in students) {
+    //   stud.display();
+    // }
 
-    return {'students': students};
+    return {'students': students, 'period': period_};
   } catch (e) {
     print(e);
     return {"message": "Unable to get data"};
   }
 }
 
-Future<void> sendStudentData(List<Students> students, String class_) async {
-  var parsedUrl = Uri.parse('${AppConfig.backendUrl}/attendance/mark/$class_/');
+Future<void> sendStudentData(
+    List<Students> students, String class_, String period_) async {
+  var parsedUrl =
+      Uri.parse('${AppConfig.backendUrl}/attendance/mark/$class_/$period_/');
 
   // String jsonData = jsonEncode(students);
   // print(jsonData);

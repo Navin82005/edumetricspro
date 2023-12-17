@@ -1,8 +1,10 @@
 import 'package:edumetricspro/animations/navigationAnimation.dart';
 import 'package:edumetricspro/components/staff/menuDrawer.dart';
 import 'package:edumetricspro/pages/attendance/attendanceSheet.dart';
+import 'package:edumetricspro/services/classes.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 import 'package:shimmer/shimmer.dart';
 
 class AttendanceTaker extends StatefulWidget {
@@ -37,7 +39,37 @@ class _AttendanceTakerState extends State<AttendanceTaker> {
   }
 
   loadData() async {
-    Box userData = await Hive.openBox('StaffData');
+    Box userData = await Hive.openBox('userData');
+    DateTime today = DateTime.now();
+    if (userData.get('timings') == null &&
+        userData.get('day') != today.weekday) {
+      print(today.weekday);
+      var data = await get_staff_timetable(userData.get('username'));
+      print(data);
+      List<String> tempClass = [];
+      List<String> tempTime = [];
+      for (var i in data['timetable']) {
+        tempClass.add(i['class']);
+        tempTime.add(i['time']);
+      }
+      print(tempClass);
+      setState(() {
+        classes = tempClass.length;
+        classNames = tempClass;
+        classTimes = tempTime;
+      });
+    }
+    setState(() {
+      loading = false;
+    });
+  }
+
+  Future<void> _refresh() async {
+    setState(() {
+      loading = true;
+    });
+    loadData();
+    print("Refreshed");
     setState(() {
       loading = false;
     });
@@ -76,109 +108,121 @@ class _AttendanceTakerState extends State<AttendanceTaker> {
         ),
         drawer: const StaffMenu(),
         body: loading
-            ? Shimmer.fromColors(
-                baseColor: Colors.grey.shade50,
-                highlightColor: Colors.white70,
-                child: ListView.builder(
-                  itemCount: classes,
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 30.0, vertical: 20.0),
-                  itemBuilder: (context, index) {
-                    return Container(
-                      height: 40.0,
-                      width: double.maxFinite,
-                      margin: const EdgeInsets.symmetric(vertical: 10.0),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(5),
-                        color: const Color.fromRGBO(0, 0, 0, 1),
-                      ),
-                      child: Row(
-                        children: [
-                          Container(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              classNames[index],
-                              style: const TextStyle(
-                                fontFamily: 'Poppins',
-                                color: Colors.white,
-                              ),
-                            ),
+            ? LiquidPullToRefresh(
+                onRefresh: () => _refresh(),
+                animSpeedFactor: 5,
+                showChildOpacityTransition: false,
+                child: Shimmer.fromColors(
+                    baseColor: Colors.grey.shade50,
+                    highlightColor: Colors.white70,
+                    child: ListView.builder(
+                      itemCount: classes,
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 30.0, vertical: 20.0),
+                      itemBuilder: (context, index) {
+                        return Container(
+                          height: 40.0,
+                          width: double.maxFinite,
+                          margin: const EdgeInsets.symmetric(vertical: 10.0),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(5),
+                            color: const Color.fromRGBO(0, 0, 0, 1),
                           ),
-                          Container(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              classTimes[index],
-                              style: const TextStyle(
-                                fontFamily: 'Poppins',
-                                color: Colors.white70,
-                                fontSize: 12.0,
+                          child: Row(
+                            children: [
+                              Container(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(
+                                  classNames[index],
+                                  style: const TextStyle(
+                                    fontFamily: 'Poppins',
+                                    color: Colors.white,
+                                  ),
+                                ),
                               ),
-                            ),
+                              Container(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(
+                                  classTimes[index],
+                                  style: const TextStyle(
+                                    fontFamily: 'Poppins',
+                                    color: Colors.white70,
+                                    fontSize: 12.0,
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
-                        ],
-                      ),
-                    );
-                  },
-                ))
+                        );
+                      },
+                    )),
+              )
             : LectureHalls());
   }
 
   // ignore: non_constant_identifier_names
-  ListView LectureHalls() {
-    return ListView.builder(
-      itemCount: classes,
-      padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 20.0),
-      itemBuilder: (context, index) {
-        return GestureDetector(
-          onTap: () {
-            print(index);
-            Navigator.of(context).push(
-              SlideLiftRoute(
-                child: AttendanceSheet(
-                  classIndex: index,
-                  className: classNames[index],
+  LiquidPullToRefresh LectureHalls() {
+    return LiquidPullToRefresh(
+      onRefresh: () => _refresh(),
+      animSpeedFactor: 5,
+      showChildOpacityTransition: false,
+      child: ListView.builder(
+        itemCount: classes,
+        padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 20.0),
+        itemBuilder: (context, index) {
+          return GestureDetector(
+            onTap: () {
+              print(index);
+              Navigator.of(context).push(
+                SlideLiftRoute(
+                  child: AttendanceSheet(
+                    classIndex: index,
+                    className: classNames[index],
+                    classTime: classTimes[index],
+                    day:
+                  ),
                 ),
+              );
+            },
+            child: Container(
+              height: 40.0,
+              margin: const EdgeInsets.symmetric(vertical: 10.0),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(5),
+                color: const Color.fromRGBO(0, 0, 0, 1),
               ),
-            );
-          },
-          child: Container(
-            height: 40.0,
-            margin: const EdgeInsets.symmetric(vertical: 10.0),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(5),
-              color: const Color.fromRGBO(0, 0, 0, 1),
-            ),
-            padding: const EdgeInsets.symmetric(horizontal: 10.0),
-            child: Row(
-              children: [
-                Container(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                    classNames[index],
-                    style: const TextStyle(
-                      fontFamily: 'Poppins',
-                      color: Colors.white,
+              padding: const EdgeInsets.symmetric(horizontal: 10.0),
+              child: Row(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      classNames[index],
+                      style: const TextStyle(
+                        fontFamily: 'Poppins',
+                        color: Colors.white,
+                      ),
                     ),
                   ),
-                ),
-                Container(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                    classTimes[index],
-                    style: const TextStyle(
-                      fontFamily: 'Poppins',
-                      color: Colors.white70,
-                      fontSize: 12.0,
+                  Container(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      classTimes[index],
+                      style: const TextStyle(
+                        fontFamily: 'Poppins',
+                        color: Colors.white70,
+                        fontSize: 12.0,
+                      ),
                     ),
                   ),
-                ),
-                const Spacer(),
-                const Icon(Icons.navigate_next),
-              ],
+                  const Spacer(),
+                  const Icon(Icons.navigate_next),
+                ],
+              ),
             ),
-          ),
-        );
-      },
+          );
+        },
+      ),
     );
   }
 }

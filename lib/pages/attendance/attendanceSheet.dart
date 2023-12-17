@@ -12,10 +12,12 @@ import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 class AttendanceSheet extends StatefulWidget {
   final classIndex;
   final String className;
+  final String classTime;
   const AttendanceSheet({
     super.key,
     required this.classIndex,
     required this.className,
+    required this.classTime,
   });
 
   @override
@@ -86,6 +88,7 @@ class _AttendanceSheetState extends State<AttendanceSheet> {
   bool loading = true;
   var data;
   bool error = false;
+  String _period = 'PERIOD';
 
   @override
   void initState() {
@@ -98,8 +101,11 @@ class _AttendanceSheetState extends State<AttendanceSheet> {
     setState(() {
       loading = true;
     });
-    data = await get_students_data(widget.className);
-    print(data['students']);
+    data = await get_students_data(
+      widget.className,
+      widget.classTime,
+    );
+    // print(data['students']);
     AttendanceList = [];
 
     try {
@@ -130,6 +136,7 @@ class _AttendanceSheetState extends State<AttendanceSheet> {
       // numberOfStudent = studentsNames.length;
       studentsNames = data['students'];
       data = data;
+      _period = data['period'];
       numberOfStudent = studentsNames.length;
       print(numberOfStudent);
       loading = false;
@@ -160,6 +167,29 @@ class _AttendanceSheetState extends State<AttendanceSheet> {
           ),
         ),
         actions: [
+          (loading)
+              ? Shimmer.fromColors(
+                  baseColor: Colors.white70,
+                  highlightColor: Colors.white30,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                    child: Text(
+                      _period,
+                      style: TextStyle(
+                        fontFamily: 'Poppins',
+                      ),
+                    ),
+                  ),
+                )
+              : Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                  child: Text(
+                    _period,
+                    style: TextStyle(
+                      fontFamily: 'Poppins',
+                    ),
+                  ),
+                ),
           Builder(builder: (context) {
             return IconButton(
               onPressed: () {
@@ -183,10 +213,9 @@ class _AttendanceSheetState extends State<AttendanceSheet> {
                     highlightColor: Colors.white30,
                     child: Padding(
                       padding: const EdgeInsets.fromLTRB(0, 30.0, 0, 30.0),
-                      child: ListView.builder(
-                        itemCount: numberOfStudent,
-                        itemBuilder: (context, index) {
-                          return Padding(
+                      child: Column(
+                        children: [
+                          Padding(
                             padding:
                                 const EdgeInsets.fromLTRB(30.0, 1.0, 30.0, 1.0),
                             child: Container(
@@ -195,25 +224,26 @@ class _AttendanceSheetState extends State<AttendanceSheet> {
                                 color: Theme.of(context).colorScheme.background,
                               ),
                               child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.end,
-                                mainAxisAlignment: MainAxisAlignment.end,
+                                // crossAxisAlignment: CrossAxisAlignment.end,
+                                // mainAxisAlignment: MainAxisAlignment.end,
                                 children: [
                                   // Spacer(),
                                   Container(
                                     padding: const EdgeInsets.all(8.0),
                                     child: Text(
-                                      studentsNames[index].rollNumber,
+                                      "Name",
                                       style: const TextStyle(
                                         fontFamily: 'Poppins',
                                         color: Colors.white,
                                       ),
                                     ),
                                   ),
-                                  Spacer(),
+                                  Expanded(child: SizedBox()),
+                                  const Spacer(),
                                   Container(
                                     padding: const EdgeInsets.all(8.0),
                                     child: Text(
-                                      studentsNames[index].name,
+                                      "Roll Number",
                                       style: const TextStyle(
                                         fontFamily: 'Poppins',
                                         color: Colors.white70,
@@ -221,13 +251,112 @@ class _AttendanceSheetState extends State<AttendanceSheet> {
                                       ),
                                     ),
                                   ),
-                                  // const Spacer(),
-                                  AttendanceCheckBox(isChecked: true),
+                                  Container(
+                                    padding: const EdgeInsets.fromLTRB(
+                                        5.0, 0, 10.0, 0),
+                                    child: Text(
+                                      "Present",
+                                      style: const TextStyle(
+                                        fontFamily: 'Poppins',
+                                        color: Colors.white70,
+                                        fontSize: 12.0,
+                                      ),
+                                    ),
+                                  ),
                                 ],
                               ),
                             ),
-                          );
-                        },
+                          ),
+                          Expanded(
+                            child: ListView.builder(
+                              itemCount: numberOfStudent,
+                              itemBuilder: (context, index) {
+                                return Padding(
+                                  padding: const EdgeInsets.fromLTRB(
+                                      30.0, 1.0, 30.0, 1.0),
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(5),
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .background,
+                                    ),
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        setState(() {
+                                          studentsNames[index].isPresent =
+                                              !studentsNames[index].isPresent;
+                                          AttendanceList[index] =
+                                              studentsNames[index].isPresent;
+                                        });
+                                      },
+                                      child: Row(
+                                        // crossAxisAlignment: CrossAxisAlignment.end,
+                                        // mainAxisAlignment: MainAxisAlignment.end,
+                                        children: [
+                                          Container(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Text(
+                                              studentsNames[index].name,
+                                              style: const TextStyle(
+                                                fontFamily: 'Poppins',
+                                                color: Colors.white,
+                                              ),
+                                            ),
+                                          ),
+                                          Expanded(child: SizedBox()),
+                                          Container(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Text(
+                                              studentsNames[index].rollNumber,
+                                              style: const TextStyle(
+                                                fontFamily: 'Poppins',
+                                                color: Colors.white70,
+                                                fontSize: 12.0,
+                                              ),
+                                            ),
+                                          ),
+                                          // const Spacer(),
+                                          Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 20.0),
+                                            child: Checkbox(
+                                              value: studentsNames[index]
+                                                  .isPresent,
+                                              onChanged: (newBool) {
+                                                setAttendance(index, newBool);
+                                              },
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
+                          SizedBox(
+                            height: 20.0,
+                          ),
+                          ElevatedButton(
+                            onPressed: () {
+                              sendStudentData(
+                                  studentsNames, widget.className, _period);
+                            },
+                            style: ButtonStyle(
+                              backgroundColor: MaterialStateProperty.all<Color>(
+                                Theme.of(context).colorScheme.background,
+                              ),
+                            ),
+                            child: Text(
+                              "Save Attendance",
+                              style: TextStyle(
+                                fontFamily: 'Poppins',
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ),
@@ -256,6 +385,58 @@ class _AttendanceSheetState extends State<AttendanceSheet> {
                   padding: const EdgeInsets.fromLTRB(0, 30.0, 0, 30.0),
                   child: Column(
                     children: [
+                      Padding(
+                        padding:
+                            const EdgeInsets.fromLTRB(30.0, 1.0, 30.0, 1.0),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(5),
+                            color: Theme.of(context).colorScheme.background,
+                          ),
+                          child: Row(
+                            // crossAxisAlignment: CrossAxisAlignment.end,
+                            // mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              // Spacer(),
+                              Container(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(
+                                  "Name",
+                                  style: const TextStyle(
+                                    fontFamily: 'Poppins',
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ),
+                              Expanded(child: SizedBox()),
+                              const Spacer(),
+                              Container(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(
+                                  "Roll Number",
+                                  style: const TextStyle(
+                                    fontFamily: 'Poppins',
+                                    color: Colors.white70,
+                                    fontSize: 12.0,
+                                  ),
+                                ),
+                              ),
+                              Container(
+                                padding:
+                                    const EdgeInsets.fromLTRB(5.0, 0, 10.0, 0),
+                                child: Text(
+                                  "Present",
+                                  style: const TextStyle(
+                                    fontFamily: 'Poppins',
+                                    color: Colors.white70,
+                                    fontSize: 12.0,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
                       Expanded(
                         child: ListView.builder(
                           itemCount: numberOfStudent,
@@ -279,10 +460,9 @@ class _AttendanceSheetState extends State<AttendanceSheet> {
                                     });
                                   },
                                   child: Row(
-                                    crossAxisAlignment: CrossAxisAlignment.end,
-                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    // crossAxisAlignment: CrossAxisAlignment.end,
+                                    // mainAxisAlignment: MainAxisAlignment.end,
                                     children: [
-                                      // Spacer(),
                                       Container(
                                         padding: const EdgeInsets.all(8.0),
                                         child: Text(
@@ -306,11 +486,15 @@ class _AttendanceSheetState extends State<AttendanceSheet> {
                                         ),
                                       ),
                                       // const Spacer(),
-                                      Checkbox(
-                                        value: studentsNames[index].isPresent,
-                                        onChanged: (newBool) {
-                                          putAttendance(index, newBool);
-                                        },
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 20.0),
+                                        child: Checkbox(
+                                          value: studentsNames[index].isPresent,
+                                          onChanged: (newBool) {
+                                            setAttendance(index, newBool);
+                                          },
+                                        ),
                                       ),
                                     ],
                                   ),
@@ -325,7 +509,8 @@ class _AttendanceSheetState extends State<AttendanceSheet> {
                       ),
                       ElevatedButton(
                         onPressed: () {
-                          sendStudentData(studentsNames, widget.className);
+                          sendStudentData(
+                              studentsNames, widget.className, _period);
                         },
                         style: ButtonStyle(
                           backgroundColor: MaterialStateProperty.all<Color>(
@@ -347,7 +532,7 @@ class _AttendanceSheetState extends State<AttendanceSheet> {
     );
   }
 
-  void putAttendance(int index, bool? newBool) {
+  void setAttendance(int index, bool? newBool) {
     return setState(
       () {
         studentsNames[index].isPresent = newBool!;
