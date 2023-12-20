@@ -198,3 +198,71 @@ class _StaffMenuState extends State<StaffMenu> {
     );
   }
 }
+
+// App-Bar
+class StaffAppBar extends StatefulWidget {
+  final String heading;
+  final Widget sCaffold;
+  const StaffAppBar({Key? mykey, required this.heading, required this.sCaffold})
+      : super(key: mykey);
+
+  @override
+  State<StaffAppBar> createState() => _StaffAppBarState();
+}
+
+class _StaffAppBarState extends State<StaffAppBar> {
+  late Box userDataBox;
+  var staffName = '';
+  var staffMode = false;
+
+  @override
+  void initState() {
+    super.initState();
+    getLocalData();
+  }
+
+  void getLocalData() async {
+    userDataBox = await Hive.box('userData');
+    setState(() {
+      staffName = userDataBox.get('name');
+      staffMode = userDataBox.get('isAdvisor');
+    });
+    print(userDataBox.get('username'));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // return Scaffold();
+    return AppBar(
+      elevation: 0.0,
+      backgroundColor: Theme.of(context).colorScheme.background,
+      title: Text(
+        // widget.heading,
+        widget.heading,
+        style: const TextStyle(
+          fontFamily: 'Poppins',
+        ),
+      ),
+      actions: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20.0),
+          child: Text(
+            staffName.toString(),
+            style: const TextStyle(
+              fontFamily: 'Poppins',
+            ),
+          ),
+        ),
+        Builder(builder: (context) {
+          return IconButton(
+            onPressed: () {
+              print(widget.sCaffold);
+            },
+            icon: const Icon(Icons.menu_open),
+            padding: const EdgeInsets.fromLTRB(0, 0, 20.0, 0),
+          );
+        })
+      ],
+    );
+  }
+}

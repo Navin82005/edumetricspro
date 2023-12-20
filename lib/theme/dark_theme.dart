@@ -9,5 +9,6 @@ ThemeData darkTheme = ThemeData(
     tertiary: Color.fromARGB(255, 30, 30, 30),
     error: Color.fromRGBO(119, 67, 219, 1),
     onBackground: Color.fromRGBO(119, 67, 219, .5),
+    surface: Color.fromRGBO(119, 67, 219, 1),
   ),
 );

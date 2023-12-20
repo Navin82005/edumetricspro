@@ -1,6 +1,7 @@
 import 'package:edumetricspro/animations/navigationAnimation.dart';
 import 'package:edumetricspro/components/staff/menuDrawer.dart';
 import 'package:edumetricspro/pages/attendance/attendanceTaker.dart';
+import 'package:edumetricspro/pages/staff/time_table.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:hive/hive.dart';
@@ -197,7 +198,9 @@ class _StaffHomeState extends State<StaffHome> {
                     const Expanded(child: SizedBox()),
                     GestureDetector(
                       onTap: () {
-                        print("Viewing Timetable");
+                        // StaffTimeTable();
+                        Navigator.of(context)
+                            .push(SlideLiftRoute(child: StaffTimeTable()));
                       },
                       child: Container(
                         height: 100,

@@ -8,6 +8,7 @@ import 'package:edumetricspro/pages/login/adminLogin.dart';
 import 'package:edumetricspro/pages/login/mainLoginPage.dart';
 import 'package:edumetricspro/pages/login/staffLogin.dart';
 import 'package:edumetricspro/pages/login/studentLogin.dart';
+import 'package:edumetricspro/pages/staff/time_table.dart';
 import 'package:edumetricspro/theme/dark_theme.dart';
 import 'package:edumetricspro/theme/light_theme.dart';
 import 'package:flutter/material.dart';
@@ -51,6 +52,7 @@ void main() async {
         'takeAttendance': (context) => AttendanceTaker(),
       },
       // home: AttendanceTaker(),
+      // home: StaffTimeTable(),
       home: runapp,
     ),
   );

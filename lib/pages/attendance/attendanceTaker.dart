@@ -78,86 +78,87 @@ class _AttendanceTakerState extends State<AttendanceTaker> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Theme.of(context).colorScheme.tertiary,
-        appBar: AppBar(
-          elevation: 0.0,
-          backgroundColor: Theme.of(context).colorScheme.background,
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          ),
-          title: const Text(
-            "Attendance Sheet",
-            style: TextStyle(
-              fontFamily: 'Poppins',
-            ),
-          ),
-          actions: [
-            Builder(builder: (context) {
-              return IconButton(
-                onPressed: () {
-                  Scaffold.of(context).openDrawer();
-                },
-                icon: const Icon(Icons.menu_open),
-                padding: const EdgeInsets.fromLTRB(0, 0, 20.0, 0),
-              );
-            })
-          ],
+      backgroundColor: Theme.of(context).colorScheme.tertiary,
+      appBar: AppBar(
+        elevation: 0.0,
+        backgroundColor: Theme.of(context).colorScheme.background,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pop(context);
+          },
         ),
-        drawer: const StaffMenu(),
-        body: loading
-            ? LiquidPullToRefresh(
-                onRefresh: () => _refresh(),
-                animSpeedFactor: 5,
-                showChildOpacityTransition: false,
-                child: Shimmer.fromColors(
-                    baseColor: Colors.grey.shade50,
-                    highlightColor: Colors.white70,
-                    child: ListView.builder(
-                      itemCount: classes,
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 30.0, vertical: 20.0),
-                      itemBuilder: (context, index) {
-                        return Container(
-                          height: 40.0,
-                          width: double.maxFinite,
-                          margin: const EdgeInsets.symmetric(vertical: 10.0),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(5),
-                            color: const Color.fromRGBO(0, 0, 0, 1),
-                          ),
-                          child: Row(
-                            children: [
-                              Container(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Text(
-                                  classNames[index],
-                                  style: const TextStyle(
-                                    fontFamily: 'Poppins',
-                                    color: Colors.white,
-                                  ),
+        title: const Text(
+          "Attendance Sheet",
+          style: TextStyle(
+            fontFamily: 'Poppins',
+          ),
+        ),
+        actions: [
+          Builder(builder: (context) {
+            return IconButton(
+              onPressed: () {
+                Scaffold.of(context).openDrawer();
+              },
+              icon: const Icon(Icons.menu_open),
+              padding: const EdgeInsets.fromLTRB(0, 0, 20.0, 0),
+            );
+          })
+        ],
+      ),
+      drawer: const StaffMenu(),
+      body: loading
+          ? LiquidPullToRefresh(
+              onRefresh: () => _refresh(),
+              animSpeedFactor: 5,
+              showChildOpacityTransition: false,
+              child: Shimmer.fromColors(
+                  baseColor: Colors.grey.shade50,
+                  highlightColor: Colors.white70,
+                  child: ListView.builder(
+                    itemCount: classes,
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 30.0, vertical: 20.0),
+                    itemBuilder: (context, index) {
+                      return Container(
+                        height: 40.0,
+                        width: double.maxFinite,
+                        margin: const EdgeInsets.symmetric(vertical: 10.0),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(5),
+                          color: const Color.fromRGBO(0, 0, 0, 1),
+                        ),
+                        child: Row(
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                classNames[index],
+                                style: const TextStyle(
+                                  fontFamily: 'Poppins',
+                                  color: Colors.white,
                                 ),
                               ),
-                              Container(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Text(
-                                  classTimes[index],
-                                  style: const TextStyle(
-                                    fontFamily: 'Poppins',
-                                    color: Colors.white70,
-                                    fontSize: 12.0,
-                                  ),
+                            ),
+                            Container(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                classTimes[index],
+                                style: const TextStyle(
+                                  fontFamily: 'Poppins',
+                                  color: Colors.white70,
+                                  fontSize: 12.0,
                                 ),
                               ),
-                            ],
-                          ),
-                        );
-                      },
-                    )),
-              )
-            : LectureHalls());
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  )),
+            )
+          : LectureHalls(),
+    );
   }
 
   // ignore: non_constant_identifier_names
@@ -172,14 +173,13 @@ class _AttendanceTakerState extends State<AttendanceTaker> {
         itemBuilder: (context, index) {
           return GestureDetector(
             onTap: () {
-              print(index);
               Navigator.of(context).push(
                 SlideLiftRoute(
                   child: AttendanceSheet(
                     classIndex: index,
                     className: classNames[index],
                     classTime: classTimes[index],
-                    day:
+                    // day:
                   ),
                 ),
               );
