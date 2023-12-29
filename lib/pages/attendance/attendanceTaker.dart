@@ -95,15 +95,17 @@ class _AttendanceTakerState extends State<AttendanceTaker> {
           ),
         ),
         actions: [
-          Builder(builder: (context) {
-            return IconButton(
-              onPressed: () {
-                Scaffold.of(context).openDrawer();
-              },
-              icon: const Icon(Icons.menu_open),
-              padding: const EdgeInsets.fromLTRB(0, 0, 20.0, 0),
-            );
-          })
+          Padding(
+            padding: const EdgeInsets.fromLTRB(0, 0, 20.0, 0),
+            child: Builder(builder: (context) {
+              return IconButton(
+                onPressed: () {
+                  Scaffold.of(context).openDrawer();
+                },
+                icon: const Icon(Icons.menu_open),
+              );
+            }),
+          )
         ],
       ),
       drawer: const StaffMenu(),

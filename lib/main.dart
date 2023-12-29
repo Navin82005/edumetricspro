@@ -23,7 +23,7 @@ void main() async {
 
   var isLogedin = loginBox.get('login');
   var userType = loginBox.get('type');
-  print(loginBox.get('refresh'));
+  print("Refresh: ${loginBox.get('refresh')}");
 
   late var runapp;
 
@@ -33,8 +33,7 @@ void main() async {
     else if (userType == 'admin')
       runapp = AdminHome();
     else if (userType == 'student') runapp = StudentHome();
-  }
-  if (isLogedin == null) {
+  } else if (isLogedin == null) {
     runapp = MainLogin();
   }
 

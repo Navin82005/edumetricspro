@@ -37,6 +37,7 @@ class AuthLogin {
         var decodedBody = json.decode(response.body);
         loginBox.put('type', mode);
         loginBox.put('login', true);
+        print("Login in Auth: ${loginBox.get('login')}");
         loginBox.put('refresh', decodedBody['refresh']);
 
         var userBody = decodedBody['userData'];

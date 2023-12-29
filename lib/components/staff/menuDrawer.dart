@@ -1,3 +1,5 @@
+import 'package:edumetricspro/animations/navigationAnimation.dart';
+import 'package:edumetricspro/pages/login/mainLoginPage.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 
@@ -12,6 +14,8 @@ class _StaffMenuState extends State<StaffMenu> {
   String dropdown = '';
   bool staffMode = false;
   String staffName = 'user';
+  late Box userDataBox;
+  late Box loginDataBox;
 
   @override
   void initState() {
@@ -21,11 +25,26 @@ class _StaffMenuState extends State<StaffMenu> {
   }
 
   loadUserData() async {
-    Box userDataBox = await Hive.openBox('userData');
+    userDataBox = await Hive.openBox('userData');
+    loginDataBox = await Hive.openBox('login');
     setState(() {
       staffName = (userDataBox.get('name'));
       staffMode = userDataBox.get('isAdvisor');
     });
+  }
+
+  void _logout() {
+    loginDataBox.put('type', null);
+    loginDataBox.put('login', false);
+    loginDataBox.put('refresh', null);
+
+    userDataBox.put('name', null);
+    userDataBox.put('username', null);
+    userDataBox.put('isAdvisor', false);
+
+    Navigator.pop(context);
+    Navigator.pop(context);
+    Navigator.of(context).push(SlideLiftRoute(child: const MainLogin()));
   }
 
   @override
@@ -193,6 +212,10 @@ class _StaffMenuState extends State<StaffMenu> {
                 ),
               ],
             ),
+          IconButton(
+            onPressed: () => _logout(),
+            icon: const Icon(Icons.logout),
+          )
         ],
       ),
     );

@@ -143,10 +143,15 @@ class _StaffTimeTableState extends State<StaffTimeTable> {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.tertiary,
 
-      drawer: const StaffMenu(),
       appBar: AppBar(
         elevation: 0.0,
         backgroundColor: Theme.of(context).colorScheme.background,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
         title: Text(
           "Time Table",
           style: const TextStyle(
@@ -163,18 +168,21 @@ class _StaffTimeTableState extends State<StaffTimeTable> {
               ),
             ),
           ),
-          Builder(builder: (context) {
-            return IconButton(
-              onPressed: () {
-                Scaffold.of(context).openDrawer();
-              },
-              icon: const Icon(Icons.menu_open),
-              padding: const EdgeInsets.fromLTRB(0, 0, 20.0, 0),
-            );
-          })
+          Padding(
+            padding: const EdgeInsets.fromLTRB(0, 0, 20.0, 0),
+            child: Builder(builder: (context) {
+              return IconButton(
+                onPressed: () {
+                  Scaffold.of(context).openDrawer();
+                },
+                icon: const Icon(Icons.menu_open),
+              );
+            }),
+          )
         ],
       ),
       // StaffAppBar1(),
+      drawer: const StaffMenu(),
 
       body: (isLoading)
           ? LiquidPullToRefresh(
@@ -267,23 +275,6 @@ class _StaffTimeTableState extends State<StaffTimeTable> {
                 ),
               ),
             ),
-
-      bottomNavigationBar: BottomNavigationBar(
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: "Home",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: "Profile",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.settings),
-            label: "Settings",
-          ),
-        ],
-      ),
     );
   }
 }
