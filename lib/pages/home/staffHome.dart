@@ -91,54 +91,54 @@ class _StaffHomeState extends State<StaffHome> {
         ],
       ),
       drawer: const StaffMenu(),
-      bottomNavigationBar: NavigationBarTheme(
-        data: NavigationBarThemeData(
-          labelTextStyle: MaterialStateProperty.all(
-            const TextStyle(
-              fontFamily: 'Poppins',
-              fontSize: 12,
-            ),
-          ),
-        ),
-        child: NavigationBar(
-          height: 50.0,
-          labelBehavior: NavigationDestinationLabelBehavior.alwaysHide,
-          selectedIndex: _bottomNavSelectedIndex,
-          onDestinationSelected: (index) => setState(() {
-            _bottomNavSelectedIndex = index;
-          }),
-          destinations: const [
-            NavigationDestination(
-              selectedIcon: Icon(Icons.home_filled),
-              icon: Icon(
-                Icons.home_outlined,
-              ),
-              label: "Home",
-            ),
-            NavigationDestination(
-              selectedIcon: Icon(Icons.calendar_month),
-              icon: Icon(
-                Icons.calendar_month_outlined,
-              ),
-              label: "Time Table",
-            ),
-            NavigationDestination(
-              selectedIcon: Icon(Icons.view_list),
-              icon: Icon(
-                Icons.view_list_outlined,
-              ),
-              label: "My Class",
-            ),
-            NavigationDestination(
-              selectedIcon: Icon(Icons.person),
-              icon: Icon(
-                Icons.person_outline,
-              ),
-              label: "Profile",
-            ),
-          ],
-        ),
-      ),
+      // bottomNavigationBar: NavigationBarTheme(
+      //   data: NavigationBarThemeData(
+      //     labelTextStyle: MaterialStateProperty.all(
+      //       const TextStyle(
+      //         fontFamily: 'Poppins',
+      //         fontSize: 12,
+      //       ),
+      //     ),
+      //   ),
+      //   child: NavigationBar(
+      //     height: 50.0,
+      //     labelBehavior: NavigationDestinationLabelBehavior.alwaysHide,
+      //     selectedIndex: _bottomNavSelectedIndex,
+      //     onDestinationSelected: (index) => setState(() {
+      //       _bottomNavSelectedIndex = index;
+      //     }),
+      //     destinations: const [
+      //       NavigationDestination(
+      //         selectedIcon: Icon(Icons.home_filled),
+      //         icon: Icon(
+      //           Icons.home_outlined,
+      //         ),
+      //         label: "Home",
+      //       ),
+      //       NavigationDestination(
+      //         selectedIcon: Icon(Icons.calendar_month),
+      //         icon: Icon(
+      //           Icons.calendar_month_outlined,
+      //         ),
+      //         label: "Time Table",
+      //       ),
+      //       NavigationDestination(
+      //         selectedIcon: Icon(Icons.view_list),
+      //         icon: Icon(
+      //           Icons.view_list_outlined,
+      //         ),
+      //         label: "My Class",
+      //       ),
+      //       NavigationDestination(
+      //         selectedIcon: Icon(Icons.person),
+      //         icon: Icon(
+      //           Icons.person_outline,
+      //         ),
+      //         label: "Profile",
+      //       ),
+      //     ],
+      //   ),
+      // ),
       body: (loading)
           ? Shimmer.fromColors(
               baseColor: Colors.grey.shade300,

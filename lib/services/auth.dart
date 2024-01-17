@@ -30,14 +30,15 @@ class AuthLogin {
       //
 
       // print('Response status: ${response.statusCode}');
-      // print('Response body: ${response.body}');
+      print('Auth File Response body: ${response.body}');
+
       if (response.statusCode == 401) {
         return {'status': 401};
       } else if (response.statusCode == 200) {
         var decodedBody = json.decode(response.body);
         loginBox.put('type', mode);
         loginBox.put('login', true);
-        print("Login in Auth: ${loginBox.get('login')}");
+        print("Auth File Login: ${loginBox.get('login')}");
         loginBox.put('refresh', decodedBody['refresh']);
 
         var userBody = decodedBody['userData'];

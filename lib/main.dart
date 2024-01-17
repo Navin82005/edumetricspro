@@ -23,7 +23,8 @@ void main() async {
 
   var isLogedin = loginBox.get('login');
   var userType = loginBox.get('type');
-  print("Refresh: ${loginBox.get('refresh')}");
+  print(
+      "Main File Refresh: ${loginBox.get('refresh')} isLogedin: $isLogedin userType: $userType");
 
   late var runapp;
 

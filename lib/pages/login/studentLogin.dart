@@ -272,7 +272,8 @@ class _StudentLoginState extends State<StudentLogin> {
 
                                   Map response = await AuthLogin.login(
                                       'student', studentEmail, studentPassword);
-                                  print(response);
+                                  print(
+                                      "Student Login File: $response Status: ${response['status'] == 200}");
                                   if (response['status'] == 204) {
                                     setState(() {
                                       error = true;
