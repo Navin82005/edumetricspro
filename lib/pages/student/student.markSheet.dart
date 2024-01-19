@@ -1,4 +1,5 @@
 import 'package:edumetricspro/animations/navigationAnimation.dart';
+import 'package:edumetricspro/pages/student/student.years.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 
@@ -12,14 +13,30 @@ class StudentMarkSheet extends StatefulWidget {
 class _StudentMarkSheetState extends State<StudentMarkSheet> {
   late Box userDataBox;
   String studentName = "";
-  bool currentYear = true;
+  bool currentSem = true;
   Map years = {
-    "Year 1": {
+    "Sem 1": {
       "IIT": ["1", "2", "3"],
-      "SEM": ["01", "02"]
-    }
+      "currentSem": false,
+    },
+    "Sem 2": {
+      "IIT": ["1", "2", "3"],
+      "currentSem": false,
+    },
+    "Sem 3": {
+      "IIT": ["1", "2", "3"],
+      "currentSem": true,
+    },
+    // "Sem 4": {
+    //   "IIT": ["1", "2", "3"],
+    //   "currentSem": false,
+    // },
+    // "Sem 5": {
+    //   "IIT": ["1", "2", "3"],
+    //   "currentSem": false,
+    // },
   };
-  List year = ["Year 1", "Year 2"];
+  List sems = ["Sem 1", "Sem 2", "Sem 3"];
 
   @override
   void initState() {
@@ -75,10 +92,16 @@ class _StudentMarkSheetState extends State<StudentMarkSheet> {
 
   Widget IITMarks() {
     return ListView.builder(
-      itemCount: year.length,
+      itemCount: sems.length,
       itemBuilder: (context, index) => GestureDetector(
         onTap: () {
-          // Add your navigation logic here
+          Navigator.of(context).push(
+            SlideLiftRoute(
+              child: SemMarks(
+                sem: sems[index],
+              ),
+            ),
+          );
         },
         child: Container(
           height: 40.0,
@@ -93,19 +116,19 @@ class _StudentMarkSheetState extends State<StudentMarkSheet> {
               Container(
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
-                  (year[index]).toString(),
+                  (sems[index]).toString(),
                   style: const TextStyle(
                     fontFamily: 'Poppins',
                     color: Colors.white,
                   ),
                 ),
               ),
-              if (currentYear)
+              if (years[sems[index]]['currentSem'])
                 Container(
                   padding: const EdgeInsets.all(8.0),
                   child: const Text(
                     // Access the nested map value using the current year
-                    "<- Current Year",
+                    "<- Current Sem",
                     style: TextStyle(
                       fontFamily: 'Poppins',
                       color: Colors.white70,

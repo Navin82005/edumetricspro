@@ -1,4 +1,5 @@
 import 'package:edumetricspro/animations/navigationAnimation.dart';
+import 'package:edumetricspro/pages/student/student.aboutMe.dart';
 import 'package:edumetricspro/pages/student/student.attendance.dart';
 import 'package:edumetricspro/pages/student/student.markSheet.dart';
 import 'package:edumetricspro/pages/student/student.timetable.dart';
@@ -211,7 +212,11 @@ class _StudentHomeState extends State<StudentHome> {
             const Expanded(child: SizedBox()),
             GestureDetector(
               onTap: () {
-                print("About Me");
+                Navigator.of(context).push(
+                  SlideLiftRoute(
+                    child: const StudentAbout(),
+                  ),
+                );
               },
               child: Container(
                 height: 100,
