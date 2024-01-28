@@ -45,6 +45,7 @@ dependencies:
   hive_flutter:
   shimmer: ^3.0.0
   liquid_pull_to_refresh: ^3.0.1
+  searchbar_animation: ^0.0.4
 
 dev_dependencies:
   flutter_test:

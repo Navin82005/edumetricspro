@@ -1,6 +1,7 @@
 import 'package:edumetricspro/animations/navigationAnimation.dart';
 import 'package:edumetricspro/pages/student/student.aboutMe.dart';
 import 'package:edumetricspro/pages/student/student.attendance.dart';
+import 'package:edumetricspro/pages/student/student.drawer.dart';
 import 'package:edumetricspro/pages/student/student.markSheet.dart';
 import 'package:edumetricspro/pages/student/student.timetable.dart';
 import 'package:flutter/material.dart';
@@ -56,6 +57,7 @@ class _StudentHomeState extends State<StudentHome> {
           ),
         ],
       ),
+      drawer: const StudentDrawer(),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 30.0),
         child: Column(
