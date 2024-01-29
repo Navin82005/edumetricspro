@@ -66,23 +66,23 @@ class _StudentDrawerState extends State<StudentDrawer> {
               color: Colors.black87,
             ),
             Menu(),
-            SearchBarAnimation(
-              textEditingController: SearchTextEditController,
-              isOriginalAnimation: false,
-              trailingWidget: const Icon(Icons.search),
-              secondaryButtonWidget: const Icon(Icons.search_off),
-              buttonColour: Colors.amber,
-              buttonBorderColour: Colors.green,
-              buttonElevation: 0,
-              buttonShadowColour: Colors.blue,
-              cursorColour: Colors.deepOrange,
-              durationInMilliSeconds: 200,
-              buttonWidget: const Icon(Icons.search),
-              onFieldSubmitted: (String value) {
-                print("Value: $value");
-                print(SearchTextEditController.text);
-              },
-            ),
+            // SearchBarAnimation(
+            //   textEditingController: SearchTextEditController,
+            //   isOriginalAnimation: false,
+            //   trailingWidget: const Icon(Icons.search),
+            //   secondaryButtonWidget: const Icon(Icons.search_off),
+            //   buttonColour: Colors.amber,
+            //   buttonBorderColour: Colors.green,
+            //   buttonElevation: 0,
+            //   buttonShadowColour: Colors.blue,
+            //   cursorColour: Colors.deepOrange,
+            //   durationInMilliSeconds: 200,
+            //   buttonWidget: const Icon(Icons.search),
+            //   onFieldSubmitted: (String value) {
+            //     print("Value: $value");
+            //     print(SearchTextEditController.text);
+            //   },
+            // ),
           ],
         ),
       ),

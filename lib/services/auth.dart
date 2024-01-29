@@ -45,8 +45,13 @@ class AuthLogin {
         userData.put('name', userBody['name']);
         userData.put('username', userBody['username']);
 
-        if (mode == 'staff') userData.put('isAdvisor', userBody['isAdvisor']);
-
+        if (mode == 'staff') {
+          userData.put('isAdvisor', userBody['isAdvisor']);
+          userData.put('lectureHall', userBody['lectureHall']);
+        } else if (mode == 'student') {
+          userData.put('lectureHall', userBody['lectureHall']);
+          userData.put('year', userBody['year']);
+        }
         decodedBody['status'] = 200;
         return decodedBody;
       }

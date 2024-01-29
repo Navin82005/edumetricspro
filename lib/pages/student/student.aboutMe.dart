@@ -11,6 +11,7 @@ class StudentAbout extends StatefulWidget {
 class _StudentAboutState extends State<StudentAbout> {
   late Box userDataBox;
   String studentName = "";
+  String studentClass = "";
 
   @override
   void initState() {
@@ -22,6 +23,8 @@ class _StudentAboutState extends State<StudentAbout> {
     userDataBox = await Hive.openBox('userData');
     setState(() {
       studentName = userDataBox.get('name');
+      studentClass = userDataBox.get('lectureHall');
+      print("studentClass.aboutMe studentClass: $studentClass");
     });
   }
 
@@ -74,9 +77,16 @@ class _StudentAboutState extends State<StudentAbout> {
             Text(
               studentName,
               style: const TextStyle(
+                fontSize: 24,
                 fontFamily: 'Poppins',
               ),
-            )
+            ),
+            Text(
+              studentClass,
+              style: const TextStyle(
+                fontFamily: 'Poppins',
+              ),
+            ),
           ],
         ),
       ],

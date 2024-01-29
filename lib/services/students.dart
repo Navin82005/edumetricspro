@@ -40,15 +40,8 @@ Future<dynamic> get_students_data(String class_, String time_) async {
       },
     );
 
-    // var data1 = json.decode(response.body);
-    // var decoded = json.decode(data1['body']);
-
-    // // List<Students> students = List<Students>();
-    // print(decoded);
-
     var rawData = json.decode(response.body)['body'];
     var period_ = rawData['period'];
-    // print(rawData['data'][0]['name']);
 
     List<Students> students = List<Students>.from(
       rawData['data'].map(
