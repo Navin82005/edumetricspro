@@ -44,6 +44,8 @@ class AuthLogin {
         var userBody = decodedBody['userData'];
         userData.put('name', userBody['name']);
         userData.put('username', userBody['username']);
+        userData.put('userMobile', userBody['userMobile']);
+        userData.put('userDob', userBody['userDob']);
 
         if (mode == 'staff') {
           userData.put('isAdvisor', userBody['isAdvisor']);
