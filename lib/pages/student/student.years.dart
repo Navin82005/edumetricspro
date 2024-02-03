@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
+import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 
 class SemMarks extends StatefulWidget {
   final String sem;
@@ -42,10 +43,19 @@ class _SemMarksState extends State<SemMarks> {
 
   void getLocalData() async {
     userDataBox = await Hive.openBox('userData');
-    setState(() {
-      studentName = userDataBox.get('name');
-    });
-    // print(IITMarks());
+    setState(
+      () {
+        studentName = userDataBox.get('name');
+      },
+    );
+  }
+
+  Future<void> getStudentData() async {
+    
+  }
+
+  Future<void> _refresh() async {
+    await getStudentData();
   }
 
   @override
@@ -75,7 +85,8 @@ class _SemMarksState extends State<SemMarks> {
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20.0),
-        child: IITMarks(),
+        child:
+            LiquidPullToRefresh(onRefresh: () => _refresh(), child: IITMarks()),
       ),
     );
   }

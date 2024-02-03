@@ -3,6 +3,7 @@
 import 'package:edumetricspro/components/FontStyles.dart';
 import 'package:edumetricspro/pages/home/adminHome.dart';
 import 'package:edumetricspro/services/auth.dart';
+import 'package:edumetricspro/services/logout.dart';
 import 'package:edumetricspro/themes/AppConfig.dart';
 import 'package:edumetricspro/themes/LoginPageColors.dart';
 import 'package:flutter/material.dart';
@@ -286,14 +287,7 @@ class _AdminLoginState extends State<AdminLogin> {
                                     });
                                   }
                                   if (response['status'] == 200) {
-                                    Navigator.pop(context);
-                                    Navigator.pop(context);
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => AdminHome(),
-                                      ),
-                                    );
+                                    Logout.popStack(context, AdminHome());
                                     setState(() {
                                       error = false;
                                       isUserPasswordValid = isUserValid = true;

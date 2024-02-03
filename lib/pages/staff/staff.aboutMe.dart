@@ -3,19 +3,17 @@
 import 'dart:html';
 import 'dart:io';
 
-import 'package:edumetricspro/pages/login/mainLoginPage.dart';
-import 'package:edumetricspro/services/logout.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 
-class StudentAbout extends StatefulWidget {
-  const StudentAbout({super.key});
+class StaffAbout extends StatefulWidget {
+  const StaffAbout({super.key});
 
   @override
-  State<StudentAbout> createState() => _StudentAboutState();
+  State<StaffAbout> createState() => _StaffAboutState();
 }
 
-class _StudentAboutState extends State<StudentAbout> {
+class _StaffAboutState extends State<StaffAbout> {
   late Box userDataBox;
   String studentName = "";
   String studentClass = "";
@@ -313,10 +311,7 @@ class _StudentAboutState extends State<StudentAbout> {
               ),
               RowDivider(),
               GestureDetector(
-                onTap: () {
-                  Logout.logout(context);
-                  print("About Me: Logout completed");
-                },
+                onTap: () => print("About Me: Change Password"),
                 child: const Row(
                   children: [
                     Expanded(

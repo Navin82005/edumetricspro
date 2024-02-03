@@ -1,3 +1,5 @@
+// ignore_for_file: unused_local_variable
+
 import 'package:edumetricspro/animations/navigationAnimation.dart';
 import 'package:edumetricspro/pages/student/student.years.dart';
 import 'package:flutter/material.dart';
@@ -27,16 +29,16 @@ class _StudentMarkSheetState extends State<StudentMarkSheet> {
       "IIT": ["1", "2", "3"],
       "currentSem": true,
     },
-    // "Sem 4": {
-    //   "IIT": ["1", "2", "3"],
-    //   "currentSem": false,
-    // },
-    // "Sem 5": {
-    //   "IIT": ["1", "2", "3"],
-    //   "currentSem": false,
-    // },
+    "Sem 4": {
+      "IIT": ["1", "2", "3"],
+      "currentSem": false,
+    },
+    "Sem 5": {
+      "IIT": ["1", "2", "3"],
+      "currentSem": false,
+    },
   };
-  List sems = ["Sem 1", "Sem 2", "Sem 3"];
+  List sems = [];
 
   @override
   void initState() {
@@ -45,6 +47,9 @@ class _StudentMarkSheetState extends State<StudentMarkSheet> {
   }
 
   void getLocalData() async {
+    for (var element in years.keys) {
+      sems += [element];
+    }
     userDataBox = await Hive.openBox('userData');
     setState(() {
       studentName = userDataBox.get('name');

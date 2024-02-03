@@ -44,6 +44,7 @@ class _StaffMenuState extends State<StaffMenu> {
 
     Navigator.pop(context);
     Navigator.pop(context);
+    Navigator.pop(context);
     Navigator.of(context).push(SlideLiftRoute(child: const MainLogin()));
   }
 

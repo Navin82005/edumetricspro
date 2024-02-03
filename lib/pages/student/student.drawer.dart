@@ -1,6 +1,7 @@
 import 'package:edumetricspro/animations/navigationAnimation.dart';
 import 'package:edumetricspro/pages/login/mainLoginPage.dart';
 import 'package:edumetricspro/pages/student/student.timetable.dart';
+import 'package:edumetricspro/services/logout.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:searchbar_animation/searchbar_animation.dart';
@@ -35,20 +36,6 @@ class _StudentDrawerState extends State<StudentDrawer> {
     setState(() {
       repMode = userDataBox.get('isRep');
     });
-  }
-
-  void _logout() {
-    loginDataBox.put('type', null);
-    loginDataBox.put('login', false);
-    loginDataBox.put('refresh', null);
-
-    userDataBox.put('name', null);
-    userDataBox.put('username', null);
-    userDataBox.put('isAdvisor', false);
-
-    Navigator.pop(context);
-    Navigator.pop(context);
-    Navigator.of(context).push(SlideLiftRoute(child: const MainLogin()));
   }
 
   TextEditingController SearchTextEditController = TextEditingController();
@@ -245,7 +232,7 @@ class _StudentDrawerState extends State<StudentDrawer> {
             ),
           IconButton(
             tooltip: "Log out",
-            onPressed: () => _logout(),
+            onPressed: () => Logout.logout(context),
             icon: const Icon(Icons.logout),
           )
         ],

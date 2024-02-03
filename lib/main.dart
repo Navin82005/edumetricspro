@@ -27,7 +27,7 @@ void main() async {
   print(
       "Main File Refresh: ${loginBox.get('refresh')} isLogedin: $isLogedin userType: $userType");
 
-  late var runapp;
+  Widget runapp = MainLogin();
 
   if (isLogedin != null) {
     if (userType == 'staff')
