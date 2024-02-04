@@ -57,10 +57,6 @@ Future<dynamic> get_students_data(String class_, String time_) async {
       ),
     );
 
-    // for (var stud in students) {
-    //   stud.display();
-    // }
-
     return {'students': students, 'period': period_};
   } catch (e) {
     print(e);
@@ -94,5 +90,25 @@ Future<void> sendStudentData(
     print(response.body);
   } catch (e) {
     print(e);
+  }
+}
+
+Future<dynamic> get_time_table(String class_) async {
+  try {
+    var parsedUrl =
+        Uri.parse("${AppConfig.backendUrl}/timetable/student/$class_");
+    // "http://localhost:8000/timetable/student/$class_"
+
+    var response = await http.post(parsedUrl);
+    var rawData = json.decode(response.body);
+
+    if (rawData["status"] == 200) {
+      print((rawData["data"]).runtimeType);
+      return {"data": rawData["data"]};
+    }
+    return {"message": "Unable to get data"};
+  } catch (e) {
+    print("Exception in services.student: $e");
+    return {"message": "Unable to get data"};
   }
 }

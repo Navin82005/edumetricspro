@@ -159,7 +159,20 @@ class _AttendanceTakerState extends State<AttendanceTaker> {
                     },
                   )),
             )
-          : LectureHalls(),
+          : (classes != 0)
+              ? LectureHalls()
+              : LiquidPullToRefresh(
+                  onRefresh: () => _refresh(),
+                  animSpeedFactor: 5,
+                  showChildOpacityTransition: false,
+                  child: const Center(
+                    child: SizedBox(
+                      height: 100,
+                      child: Center(
+                          child: Text("You have no classes for today! ")),
+                    ),
+                  ),
+                ),
     );
   }
 

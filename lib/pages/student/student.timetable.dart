@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
 import "package:edumetricspro/components/staff/menuDrawer.dart";
+import "package:edumetricspro/services/students.dart";
 import "package:flutter/material.dart";
 import "package:hive_flutter/hive_flutter.dart";
 import "package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart";
@@ -21,14 +22,15 @@ class _StudentTimetableState extends State<StudentTimetable> {
   int dateTimeNow = 0;
   int tempIndex = 0;
   bool isLoading = true;
-
-  var timeTableData = [
+  String studentClass = "";
+  int timeTableData_length = 63;
+  List<dynamic> timeTableData = [
     // "Monday",
     // "Tuesday",
     // "Wednesday",
     // "Thursday",
     // "Friday",
-    "Dbms",
+    "08:30 AM - 09:30 AM",
     "Oops",
     "Verbal",
     "DM",
@@ -61,11 +63,13 @@ class _StudentTimetableState extends State<StudentTimetable> {
   ];
 
   List<Map> tileData = [
+    {"period": "Time", "color": Colors.green},
     {"period": "Monday", "color": Colors.green},
     {"period": "Tuesday", "color": Colors.green},
     {"period": "Wednesday", "color": Colors.green},
     {"period": "Thursday", "color": Colors.green},
     {"period": "Friday", "color": Colors.green},
+    {"period": "Saturday", "color": Colors.green},
   ];
 
   @override
@@ -85,36 +89,43 @@ class _StudentTimetableState extends State<StudentTimetable> {
     userDataBox = await Hive.openBox('userData');
     setState(() {
       dateTimeNow = DateTime.now().weekday;
+      studentClass = userDataBox.get('lectureHall');
       tempIndex = dateTimeNow;
       staffName = (userDataBox.get('name'));
     });
-    SetTileData(dateTimeNow, timeTableData);
-    print("My name: ${userDataBox.get('username')}");
+    try {
+      var tileDataResponse = await get_time_table(studentClass);
+      print("tileData: ${tileDataResponse["data"]}");
+      setState(() {
+        timeTableData = tileDataResponse["data"];
+        timeTableData_length = timeTableData.length;
+        print(timeTableData_length);
+      });
 
+      print("My name: ${userDataBox.get('username')}");
+    } catch (e) {
+      print("Exception in student.timetable: $e");
+    }
+
+    SetTileData(dateTimeNow, timeTableData);
     setState(() {
       isLoading = false;
     });
   }
 
-  void SetTileData(int today, List<String> tiles) {
-    tempIndex = dateTimeNow;
+  void SetTileData(int today, List<dynamic> tiles) {
+    tempIndex = 1;
+    print("today: $today; temIndex: $tempIndex");
     for (int i = 0; i < tiles.length; i++) {
       var period = tiles[i];
       tileData.add(
           {"period": period, "color": Theme.of(context).colorScheme.surface});
 
-      if (tileData[i + 5]['period'] == " ") {
-        if (tempIndex == i + 1) {
-          tileData[i + 5]['color'] = Colors.green;
-          tempIndex += 5;
-        } else {
-          tileData[i + 5]['color'] = Theme.of(context).colorScheme.surface;
-        }
+      if (tempIndex == i + 1) {
+        tileData[i + 7]['color'] = Colors.green;
+        tempIndex += 7;
       } else {
-        if (tempIndex == i + 1) {
-          tempIndex += 5;
-        }
-        tileData[i + 5]['color'] = Theme.of(context).colorScheme.onBackground;
+        tileData[i + 7]['color'] = Theme.of(context).colorScheme.surface;
       }
     }
   }
@@ -211,39 +222,50 @@ class _StudentTimetableState extends State<StudentTimetable> {
               onRefresh: () => _refresh(),
               child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 0.0),
-                child: GridView.builder(
-                  itemCount: timeTableData.length,
-                  padding: EdgeInsets.all(20.0),
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 5,
-                    crossAxisSpacing: 6.0,
-                    mainAxisSpacing: 6.0,
-                    mainAxisExtent: 140.0,
-                  ),
-                  itemBuilder: (context, index) {
-                    return Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(5.0),
-                        color: tileData[index]['color'],
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(3.0),
-                        child: Center(
-                          child: RotatedBox(
-                            quarterTurns: 1,
-                            child: Text(
-                              tileData[index]['period'],
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                fontFamily: 'Poppins',
-                                fontSize: 12.0,
+                child: Directionality(
+                  textDirection: TextDirection.rtl,
+                  // textDirection: TextDirection.ltr,
+                  child: StatefulBuilder(
+                    builder: (context, setState) {
+                      return GridView.builder(
+                        itemCount: timeTableData.length + 7,
+                        padding: EdgeInsets.all(20.0),
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 7,
+                          crossAxisSpacing: 6.0,
+                          mainAxisSpacing: 6.0,
+                          mainAxisExtent: 140.0,
+                        ),
+                        itemBuilder: (context, index) {
+                          return Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(5.0),
+                              color: tileData[index]['color'],
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(3.0),
+                              child: Center(
+                                child: Directionality(
+                                  textDirection: TextDirection.ltr,
+                                  child: RotatedBox(
+                                    quarterTurns: 1,
+                                    child: Text(
+                                      tileData[index]['period'],
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        fontFamily: 'Poppins',
+                                        fontSize: 12.0,
+                                      ),
+                                    ),
+                                  ),
+                                ),
                               ),
                             ),
-                          ),
-                        ),
-                      ),
-                    );
-                  },
+                          );
+                        },
+                      );
+                    },
+                  ),
                 ),
               ),
             ),

@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
 import "package:edumetricspro/components/staff/menuDrawer.dart";
+import "package:edumetricspro/services/services.stafftimetable.dart";
 import "package:flutter/material.dart";
 import "package:hive_flutter/hive_flutter.dart";
 import "package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart";
@@ -23,66 +24,30 @@ class _StaffTimeTableState extends State<StaffTimeTable> {
   int dateTimeNow = 0;
   int tempIndex = 0;
   bool isLoading = true;
+  bool server_error = false;
+  bool internal_server_error = false;
 
-  var timeTableData = [
-    // "Monday",
-    // "Tuesday",
-    // "Wednesday",
-    // "Thursday",
-    // "Friday",
-    " ",
-    "2 CSE - B (OOPS)\n8:30-9:30",
-    " ",
-    " ",
-    " ",
-    " ",
-    " ",
-    " ",
-    " ",
-    " ",
-    " ",
-    " ",
-    " ",
-    " ",
-    "2 CSE - B (OOPS)\n10:50-11:50",
-    " ",
-    " ",
-    " ",
-    " ",
-    " ",
-    " ",
-    " ",
-    " ",
-    " ",
-    " ",
-    " ",
-    " ",
-    " ",
-    " ",
-    "2 CSE - B (OOPS)",
-    " ",
-    " ",
-    "2 CSE - B (OOPS)",
-    " ",
-    " ",
-    "2 CSE - B (OOPS)",
-    " ",
-    " ",
-    "2 CSE - B (OOPS)",
-    "2 CSE - B (OOPS)",
-    " ",
-    " ",
-    "2 CSE - B (OOPS)",
-    " ",
-    " ",
-  ];
+  var timeTableData = {
+    "monday": [
+      ["2 CSE - B", "OOPS", "08:30 - 9:30"],
+      ["2 CSE - B", "OOPS", "10:50 - 11:50"],
+      ["1 CSE - C", "CTPS", "3:45 - 4:35"],
+    ],
+    "tuesday": [
+      ["2 CSE - B", "OOPS", "08:30 - 9:30"],
+      ["2 CSE - B", "OOPS", "10:50 - 11:50"],
+      ["1 CSE - C", "CTPS", "3:45 - 4:35"],
+    ],
+  };
 
   List<Map> tileData = [
+    {"period": "Time", "color": Colors.green},
     {"period": "Monday", "color": Colors.green},
     {"period": "Tuesday", "color": Colors.green},
     {"period": "Wednesday", "color": Colors.green},
     {"period": "Thursday", "color": Colors.green},
     {"period": "Friday", "color": Colors.green},
+    {"period": "Saturday", "color": Colors.green},
   ];
 
   @override
@@ -105,37 +70,41 @@ class _StaffTimeTableState extends State<StaffTimeTable> {
       tempIndex = dateTimeNow;
       staffName = (userDataBox.get('name'));
       staffMode = userDataBox.get('isAdvisor');
-      loading = false;
     });
-    SetTileData(dateTimeNow, timeTableData);
+    var timetableData = await get_staff_timetable(staffName);
+    // print(
+    //   "timetableData : ${timetableData.containsKey("message")}; timetableData == ['Unable to get data'] : ${timetableData == [
+    //         "Unable to get data"
+    //       ]}",
+    // );
+    print(
+        'timeTableData[message] = ${timetableData["message"].toString() == "[[Unable to process data]]"}');
+    if (timetableData.containsKey("message")) {
+      setState(
+        () {
+          if (timetableData["message"].toString() ==
+              "[[Unable to process data]]") {
+            server_error = false;
+            internal_server_error = true;
+          } else {
+            server_error = true;
+            internal_server_error = false;
+          }
+        },
+      );
+    } else {
+      setState(() {
+        print("timetableData: $timetableData");
+        timeTableData = timetableData;
+        server_error = false;
+        internal_server_error = false;
+      });
+    }
     print(userDataBox.get('username'));
 
     setState(() {
       isLoading = false;
     });
-  }
-
-  void SetTileData(int today, List<String> tiles) {
-    tempIndex = dateTimeNow;
-    for (int i = 0; i < tiles.length; i++) {
-      var period = tiles[i];
-      tileData.add(
-          {"period": period, "color": Theme.of(context).colorScheme.surface});
-
-      if (tileData[i + 5]['period'] == " ") {
-        if (tempIndex == i + 1) {
-          tileData[i + 5]['color'] = Colors.green;
-          tempIndex += 5;
-        } else {
-          tileData[i + 5]['color'] = Theme.of(context).colorScheme.surface;
-        }
-      } else {
-        if (tempIndex == i + 1) {
-          tempIndex += 5;
-        }
-        tileData[i + 5]['color'] = Theme.of(context).colorScheme.onBackground;
-      }
-    }
   }
 
   @override
@@ -191,90 +160,213 @@ class _StaffTimeTableState extends State<StaffTimeTable> {
               color: Theme.of(context).colorScheme.primary,
               onRefresh: () => _refresh(),
               child: Shimmer.fromColors(
-                baseColor: Colors.grey.shade50,
-                highlightColor: Colors.white70,
+                baseColor: Theme.of(context).colorScheme.onBackground,
+                highlightColor: Theme.of(context).colorScheme.primary,
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 0.0),
-                  child: GridView.builder(
-                    itemCount: 35,
-                    padding: EdgeInsets.all(20.0),
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 5,
-                      crossAxisSpacing: 6.0,
-                      mainAxisSpacing: 6.0,
-                      mainAxisExtent: 140.0,
-                    ),
-                    itemBuilder: (context, index) {
-                      return Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(5.0),
-                          color: Colors.purple,
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(3.0),
-                          child: Center(
-                            child: RotatedBox(
-                              quarterTurns: 1,
-                              child: Text(
-                                "pass",
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  fontFamily: 'Poppins',
-                                  fontSize: 12.0,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      );
-                    },
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 20.0,
+                    horizontal: 20.0,
+                  ),
+                  child: ListView(
+                    children: ListLoaderDays(),
                   ),
                 ),
               ),
             )
-          : LiquidPullToRefresh(
-              animSpeedFactor: 5,
-              showChildOpacityTransition: false,
-              color: Theme.of(context).colorScheme.primary,
-              onRefresh: () => _refresh(),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 0.0),
-                child: GridView.builder(
-                  itemCount: timeTableData.length,
-                  padding: EdgeInsets.all(20.0),
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 5,
-                    crossAxisSpacing: 6.0,
-                    mainAxisSpacing: 6.0,
-                    mainAxisExtent: 140.0,
-                  ),
-                  itemBuilder: (context, index) {
-                    return Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(5.0),
-                        color: tileData[index]['color'],
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(3.0),
-                        child: Center(
-                          child: RotatedBox(
-                            quarterTurns: 1,
-                            child: Text(
-                              tileData[index]['period'],
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                fontFamily: 'Poppins',
-                                fontSize: 12.0,
-                              ),
-                            ),
+          : (server_error)
+              ? LiquidPullToRefresh(
+                  animSpeedFactor: 5,
+                  showChildOpacityTransition: false,
+                  color: Theme.of(context).colorScheme.primary,
+                  onRefresh: () => _refresh(),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 20.0,
+                      horizontal: 20.0,
+                    ),
+                    child: ListView(
+                      children: [
+                        Text(
+                          "Unable to connect to the server. Make sure the device is connected to the internet",
+                          style: TextStyle(
+                            fontFamily: "Poppins",
+                            fontSize: 18,
+                            color: Theme.of(context).colorScheme.error,
                           ),
+                        )
+                      ],
+                    ),
+                  ),
+                )
+              : (internal_server_error)
+                  ? LiquidPullToRefresh(
+                      animSpeedFactor: 5,
+                      showChildOpacityTransition: false,
+                      color: Theme.of(context).colorScheme.primary,
+                      onRefresh: () => _refresh(),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 20.0,
+                          horizontal: 20.0,
+                        ),
+                        child: ListView(
+                          children: [
+                            Text(
+                              "Unable to load data. Please try again later",
+                              style: TextStyle(
+                                fontFamily: "Poppins",
+                                fontSize: 18,
+                                color: Theme.of(context).colorScheme.error,
+                              ),
+                            )
+                          ],
                         ),
                       ),
-                    );
-                  },
+                    )
+                  : LiquidPullToRefresh(
+                      animSpeedFactor: 5,
+                      showChildOpacityTransition: false,
+                      color: Theme.of(context).colorScheme.primary,
+                      onRefresh: () => _refresh(),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 20.0,
+                          horizontal: 20.0,
+                        ),
+                        child: ListView(
+                          children: ListTimeTable(),
+                        ),
+                      ),
+                    ),
+    );
+  }
+
+  ListTimeTable() {
+    List<Widget> lst = [];
+    print(server_error);
+    try {
+      for (var element in timeTableData.keys) {
+        int i = 0;
+        lst.add(
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 10.0),
+            child: Container(
+              decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.onBackground,
+                  borderRadius: BorderRadius.circular(5.0)),
+              child: Center(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 5.0),
+                  child: Text(
+                    element.toUpperCase(),
+                    style: TextStyle(
+                      fontFamily: "Poppins",
+                      fontSize: 18,
+                    ),
+                  ),
                 ),
               ),
             ),
-    );
+          ),
+        );
+        while (i < timeTableData[element]!.length) {
+          print(timeTableData[element]![i]);
+          lst.add(
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 5.0),
+              child: Container(
+                decoration: BoxDecoration(
+                    // color: Colors.green[800],
+                    color: Theme.of(context).colorScheme.surface,
+                    borderRadius: BorderRadius.circular(5.0)),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 20.0, vertical: 5.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(
+                        "${i + 1} : ",
+                        style: TextStyle(
+                          fontFamily: "Poppins",
+                          color: Colors.amber,
+                          fontSize: 15,
+                        ),
+                      ),
+                      Text(
+                        timeTableData[element]![i][0].toUpperCase(),
+                        style: TextStyle(
+                          fontFamily: "Poppins",
+                          fontSize: 15,
+                        ),
+                      ),
+                      Spacer(),
+                      Text(
+                        timeTableData[element]![i][1].toUpperCase(),
+                        style: TextStyle(
+                          fontFamily: "Poppins",
+                          fontSize: 15,
+                        ),
+                      ),
+                      Spacer(),
+                      Text(
+                        timeTableData[element]![i][2].toUpperCase(),
+                        style: TextStyle(
+                          fontFamily: "Poppins",
+                          fontSize: 15,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          );
+          i++;
+        }
+        print(timeTableData[element]);
+      }
+    } catch (e) {
+      print("Error in time_table: $e");
+    }
+    return lst;
+  }
+
+  ListLoaderDays() {
+    List<Widget> lst = [];
+    var days = [
+      "monday",
+      "tuesday",
+      "wednesday",
+      "thursday",
+      "friday",
+    ];
+    for (var element in days) {
+      lst.add(
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 10.0),
+          child: Container(
+            decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.onBackground,
+                borderRadius: BorderRadius.circular(5.0)),
+            child: Center(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 5.0),
+                child: Text(
+                  element.toUpperCase(),
+                  style: TextStyle(
+                    fontFamily: "Poppins",
+                    fontSize: 18,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+    }
+    ;
+    return lst;
   }
 }
