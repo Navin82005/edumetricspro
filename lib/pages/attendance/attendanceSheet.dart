@@ -343,8 +343,8 @@ class _AttendanceSheetState extends State<AttendanceSheet> {
                           ),
                           ElevatedButton(
                             onPressed: () {
-                              sendStudentData(
-                                  studentsNames, widget.className, _period);
+                              sendStudentData(studentsNames, widget.className,
+                                  _period, widget.classTime);
                             },
                             style: ButtonStyle(
                               backgroundColor: MaterialStateProperty.all<Color>(
@@ -511,8 +511,8 @@ class _AttendanceSheetState extends State<AttendanceSheet> {
                       ),
                       ElevatedButton(
                         onPressed: () {
-                          sendStudentData(
-                              studentsNames, widget.className, _period);
+                          sendStudentData(studentsNames, widget.className,
+                              _period, widget.classTime);
                         },
                         style: ButtonStyle(
                           backgroundColor: MaterialStateProperty.all<Color>(

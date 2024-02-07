@@ -2,7 +2,9 @@
 
 import 'package:edumetricspro/animations/navigationAnimation.dart';
 import 'package:edumetricspro/pages/student/student.attendanceSheet.dart';
+import 'package:edumetricspro/services/student.attendance.dart';
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 
 class StudentAttendance extends StatefulWidget {
@@ -32,6 +34,7 @@ class _StudentAttendanceState extends State<StudentAttendance> {
     "test"
   ];
   int subjectCount = 0;
+  List lowAttendance = [true, false, true, false];
 
   @override
   void initState() {
@@ -42,12 +45,27 @@ class _StudentAttendanceState extends State<StudentAttendance> {
 
   void loadData() async {
     List temp = [];
-    print(subjectNamesAttendance);
+    Box userDataBox = await Hive.openBox('userData');
+    String rollnumber = userDataBox.get("rollNo");
+    String lh = userDataBox.get("lectureHall");
+    print("rollnumber $rollnumber, Lh $lh");
+    var rawData = await getAttendancePercentage(rollnumber, lh);
+    print("stu8dent.attendance.dart rawData: $rawData");
+    setState(() {
+      subjectNamesAttendance = rawData;
+    });
+    List templowAttendance = [];
     for (var sub in subjectNamesAttendance.keys) {
       temp.add(sub.toString());
+      if (subjectNamesAttendance[sub.toString()] < 75) {
+        templowAttendance.add(true);
+      } else {
+        templowAttendance.add(false);
+      }
     }
     setState(() {
       subjectNames = temp;
+      lowAttendance = templowAttendance;
       subjectCount = subjectNames.length;
     });
   }
@@ -128,33 +146,61 @@ class _StudentAttendanceState extends State<StudentAttendance> {
                 color: const Color.fromRGBO(0, 0, 0, 1),
               ),
               padding: const EdgeInsets.symmetric(horizontal: 10.0),
-              child: Row(
-                children: [
-                  Container(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(
-                      (subjectNames[index]).toString(),
-                      style: const TextStyle(
-                        fontFamily: 'Poppins',
-                        color: Colors.white,
-                      ),
+              child: (!lowAttendance[index])
+                  ? Row(
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            (subjectNames[index]).toString(),
+                            style: const TextStyle(
+                              fontFamily: 'Poppins',
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                        Container(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            "${subjectNamesAttendance[subjectNames[index]]}%",
+                            style: const TextStyle(
+                              fontFamily: 'Poppins',
+                              color: Colors.white70,
+                              fontSize: 12.0,
+                            ),
+                          ),
+                        ),
+                        const Spacer(),
+                        const Icon(Icons.navigate_next),
+                      ],
+                    )
+                  : Row(
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            (subjectNames[index]).toString(),
+                            style: const TextStyle(
+                              fontFamily: 'Poppins',
+                              color: Colors.red,
+                            ),
+                          ),
+                        ),
+                        Container(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            "${subjectNamesAttendance[subjectNames[index]]}%",
+                            style: const TextStyle(
+                              fontFamily: 'Poppins',
+                              color: Colors.red,
+                              fontSize: 12.0,
+                            ),
+                          ),
+                        ),
+                        const Spacer(),
+                        const Icon(Icons.navigate_next),
+                      ],
                     ),
-                  ),
-                  Container(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(
-                      "${subjectNamesAttendance[subjectNames[index]]}%",
-                      style: const TextStyle(
-                        fontFamily: 'Poppins',
-                        color: Colors.white70,
-                        fontSize: 12.0,
-                      ),
-                    ),
-                  ),
-                  const Spacer(),
-                  const Icon(Icons.navigate_next),
-                ],
-              ),
             ),
           );
         },

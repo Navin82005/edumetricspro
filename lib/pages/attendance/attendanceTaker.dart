@@ -29,6 +29,13 @@ class _AttendanceTakerState extends State<AttendanceTaker> {
     "11:05AM-12:35PM",
     "1:20PM-2:05PM",
   ];
+  List<bool> classActive = [
+    false,
+    false,
+    false,
+    false,
+    false,
+  ];
   int currentPage = 0;
 
   @override
@@ -48,15 +55,18 @@ class _AttendanceTakerState extends State<AttendanceTaker> {
       print(data);
       List<String> tempClass = [];
       List<String> tempTime = [];
+      List<bool> tempActive = [];
       for (var i in data['timetable']) {
         tempClass.add(i['class']);
         tempTime.add(i['time']);
+        tempActive.add(i['isActive']);
       }
       print(tempClass);
       setState(() {
         classes = tempClass.length;
         classNames = tempClass;
         classTimes = tempTime;
+        classActive = tempActive;
       });
     }
     setState(() {
@@ -230,6 +240,19 @@ class _AttendanceTakerState extends State<AttendanceTaker> {
                       ),
                     ),
                   ),
+                  (classActive[index])
+                      ? Container(
+                          padding: const EdgeInsets.all(8.0),
+                          child: const Text(
+                            "- Now",
+                            style: TextStyle(
+                              fontFamily: 'Poppins',
+                              color: Colors.deepPurpleAccent,
+                              fontSize: 12.0,
+                            ),
+                          ),
+                        )
+                      : const Spacer(),
                   const Spacer(),
                   const Icon(Icons.navigate_next),
                 ],

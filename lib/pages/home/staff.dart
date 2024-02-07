@@ -1,5 +1,7 @@
 import 'package:edumetricspro/animations/navigationAnimation.dart';
 import 'package:edumetricspro/pages/attendance/attendanceTaker.dart';
+import 'package:edumetricspro/pages/staff/staff.aboutMe.dart';
+import 'package:edumetricspro/pages/staff/staff.myclass.dart';
 import 'package:edumetricspro/pages/staff/time_table.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
@@ -36,7 +38,6 @@ class _StaffHomeContentState extends State<StaffHomeContent> {
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 30.0),
         child: Column(
-          // mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             const Expanded(child: SizedBox()),
@@ -93,7 +94,7 @@ class _StaffHomeContentState extends State<StaffHomeContent> {
               onTap: () {
                 // StaffTimeTable();
                 Navigator.of(context)
-                    .push(SlideLiftRoute(child: StaffTimeTable()));
+                    .push(SlideLiftRoute(child: const StaffTimeTable()));
               },
               child: Container(
                 height: 100,
@@ -143,6 +144,8 @@ class _StaffHomeContentState extends State<StaffHomeContent> {
               GestureDetector(
                 onTap: () {
                   print("My Class");
+                  Navigator.of(context)
+                      .push(SlideLiftRoute(child: const StaffMyClass()));
                 },
                 child: Container(
                   height: 100,
@@ -191,6 +194,8 @@ class _StaffHomeContentState extends State<StaffHomeContent> {
             GestureDetector(
               onTap: () {
                 print("About Me");
+                Navigator.of(context)
+                    .push(SlideLiftRoute(child: const StaffAbout()));
               },
               child: Container(
                 height: 100,

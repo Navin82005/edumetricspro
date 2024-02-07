@@ -52,6 +52,7 @@ class AuthLogin {
           userData.put('lectureHall', userBody['lectureHall']);
         } else if (mode == 'student') {
           userData.put('lectureHall', userBody['lectureHall']);
+          userData.put('rollNo', userBody['rollNo']);
           userData.put('year', userBody['year']);
         }
         decodedBody['status'] = 200;

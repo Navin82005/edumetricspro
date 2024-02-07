@@ -1,8 +1,6 @@
 // ignore_for_file: non_constant_identifier_names
 
-import 'dart:html';
-import 'dart:io';
-
+import 'package:edumetricspro/services/logout.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 
@@ -311,7 +309,10 @@ class _StaffAboutState extends State<StaffAbout> {
               ),
               RowDivider(),
               GestureDetector(
-                onTap: () => print("About Me: Change Password"),
+                onTap: () {
+                  Logout.logout(context);
+                  print("About Me: Logout completed");
+                },
                 child: const Row(
                   children: [
                     Expanded(

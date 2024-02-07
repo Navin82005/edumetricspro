@@ -64,10 +64,10 @@ Future<dynamic> get_students_data(String class_, String time_) async {
   }
 }
 
-Future<void> sendStudentData(
-    List<Students> students, String class_, String period_) async {
-  var parsedUrl =
-      Uri.parse('${AppConfig.backendUrl}/attendance/mark/$class_/$period_/');
+Future<void> sendStudentData(List<Students> students, String class_,
+    String period_, String classTime) async {
+  var parsedUrl = Uri.parse(
+      '${AppConfig.backendUrl}/attendance/mark/$class_/$classTime/$period_/');
 
   // String jsonData = jsonEncode(students);
   // print(jsonData);

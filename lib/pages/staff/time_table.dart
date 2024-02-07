@@ -291,14 +291,14 @@ class _StaffTimeTableState extends State<StaffTimeTable> {
                         style: TextStyle(
                           fontFamily: "Poppins",
                           color: Colors.amber,
-                          fontSize: 15,
+                          fontSize: 13,
                         ),
                       ),
                       Text(
                         timeTableData[element]![i][0].toUpperCase(),
                         style: TextStyle(
                           fontFamily: "Poppins",
-                          fontSize: 15,
+                          fontSize: 13,
                         ),
                       ),
                       Spacer(),
@@ -306,7 +306,7 @@ class _StaffTimeTableState extends State<StaffTimeTable> {
                         timeTableData[element]![i][1].toUpperCase(),
                         style: TextStyle(
                           fontFamily: "Poppins",
-                          fontSize: 15,
+                          fontSize: 13,
                         ),
                       ),
                       Spacer(),
@@ -314,7 +314,7 @@ class _StaffTimeTableState extends State<StaffTimeTable> {
                         timeTableData[element]![i][2].toUpperCase(),
                         style: TextStyle(
                           fontFamily: "Poppins",
-                          fontSize: 15,
+                          fontSize: 13,
                         ),
                       ),
                     ],
