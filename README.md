@@ -1,4 +1,4 @@
-# edumetricspro
+# EduMetricsPro
 
 A new Flutter project.
 
@@ -15,5 +15,5 @@ For help getting started with Flutter development, view the
 [online documentation](https://docs.flutter.dev/), which offers tutorials,
 samples, guidance on mobile development, and a full API reference.
 
-# the template image
+# The Template Image of the Application
 ![Banner Image](https://github.com/Navin82005/edumetricspro/blob/main/LinkedIn%20Post%201.png)
