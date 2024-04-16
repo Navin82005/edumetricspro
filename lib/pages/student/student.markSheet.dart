@@ -2,8 +2,9 @@
 
 import 'package:edumetricspro/animations/navigationAnimation.dart';
 import 'package:edumetricspro/pages/student/student.years.dart';
+import 'package:edumetricspro/services/student.marks.dart';
 import 'package:flutter/material.dart';
-import 'package:hive/hive.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class StudentMarkSheet extends StatefulWidget {
   const StudentMarkSheet({super.key});
@@ -13,10 +14,9 @@ class StudentMarkSheet extends StatefulWidget {
 }
 
 class _StudentMarkSheetState extends State<StudentMarkSheet> {
-  late Box userDataBox;
+  late SharedPreferences userDataBox;
   String studentName = "";
-  bool currentSem = true;
-  Map years = {
+  Map<String, dynamic> years = {
     "Sem 1": {
       "IIT": ["1", "2", "3"],
       "currentSem": false,
@@ -38,7 +38,7 @@ class _StudentMarkSheetState extends State<StudentMarkSheet> {
       "currentSem": false,
     },
   };
-  List sems = [];
+  List<String> sems = [];
 
   @override
   void initState() {
@@ -47,12 +47,13 @@ class _StudentMarkSheetState extends State<StudentMarkSheet> {
   }
 
   void getLocalData() async {
+    userDataBox = await SharedPreferences.getInstance();
+    await requestMarks();
     for (var element in years.keys) {
-      sems += [element];
+      sems.add(element);
     }
-    userDataBox = await Hive.openBox('userData');
     setState(() {
-      studentName = userDataBox.get('name');
+      studentName = userDataBox.getString('name') ?? "";
     });
   }
 
@@ -85,7 +86,6 @@ class _StudentMarkSheetState extends State<StudentMarkSheet> {
         padding: const EdgeInsets.symmetric(horizontal: 20),
         child: Column(
           children: [
-            // Add any other widgets you want in the column here
             Expanded(
               child: IITMarks(),
             ),
@@ -96,7 +96,7 @@ class _StudentMarkSheetState extends State<StudentMarkSheet> {
   }
 
   Widget IITMarks() {
-    return ListView.builder(
+    return ListView.separated(
       itemCount: sems.length,
       itemBuilder: (context, index) => GestureDetector(
         onTap: () {
@@ -121,7 +121,7 @@ class _StudentMarkSheetState extends State<StudentMarkSheet> {
               Container(
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
-                  (sems[index]).toString(),
+                  sems[index],
                   style: const TextStyle(
                     fontFamily: 'Poppins',
                     color: Colors.white,
@@ -132,8 +132,7 @@ class _StudentMarkSheetState extends State<StudentMarkSheet> {
                 Container(
                   padding: const EdgeInsets.all(8.0),
                   child: const Text(
-                    // Access the nested map value using the current year
-                    "<- Current Sem",
+                    "Current Sem",
                     style: TextStyle(
                       fontFamily: 'Poppins',
                       color: Colors.white70,
@@ -147,6 +146,7 @@ class _StudentMarkSheetState extends State<StudentMarkSheet> {
           ),
         ),
       ),
+      separatorBuilder: (context, index) => const SizedBox(height: 10),
     );
   }
 }

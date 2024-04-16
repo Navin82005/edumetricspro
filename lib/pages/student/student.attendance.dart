@@ -6,6 +6,7 @@ import 'package:edumetricspro/services/student.attendance.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class StudentAttendance extends StatefulWidget {
   const StudentAttendance({super.key});
@@ -38,36 +39,45 @@ class _StudentAttendanceState extends State<StudentAttendance> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     loadData();
   }
 
   void loadData() async {
-    List temp = [];
-    Box userDataBox = await Hive.openBox('userData');
-    String rollnumber = userDataBox.get("rollNo");
-    String lh = userDataBox.get("lectureHall");
-    print("rollnumber $rollnumber, Lh $lh");
-    var rawData = await getAttendancePercentage(rollnumber, lh);
-    print("stu8dent.attendance.dart rawData: $rawData");
-    setState(() {
-      subjectNamesAttendance = rawData;
-    });
-    List templowAttendance = [];
-    for (var sub in subjectNamesAttendance.keys) {
-      temp.add(sub.toString());
-      if (subjectNamesAttendance[sub.toString()] < 75) {
-        templowAttendance.add(true);
-      } else {
-        templowAttendance.add(false);
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    String? rollnumber = prefs.getString("registerNumber");
+    String? sem = prefs.getString("sem");
+
+    if (rollnumber != null && sem != null) {
+      print("rollnumber $rollnumber, Sem $sem");
+      var rawData = await getAttendancePercentage(rollnumber, sem);
+      print("student.attendance.dart rawData: $rawData");
+
+      List temp = [];
+      List templowAttendance = [];
+
+      setState(() {
+        subjectNamesAttendance = rawData;
+      });
+
+      for (var sub in subjectNamesAttendance.keys) {
+        temp.add(sub.toString());
+        if (subjectNamesAttendance[sub.toString()] < 75) {
+          templowAttendance.add(true);
+        } else {
+          templowAttendance.add(false);
+        }
       }
+
+      setState(() {
+        subjectNames = temp;
+        lowAttendance = templowAttendance;
+        subjectCount = subjectNames.length;
+      });
+    } else {
+      print("Roll number or lecture hall not found in shared preferences.");
     }
-    setState(() {
-      subjectNames = temp;
-      lowAttendance = templowAttendance;
-      subjectCount = subjectNames.length;
-    });
   }
 
   Future<void> _refresh() async {

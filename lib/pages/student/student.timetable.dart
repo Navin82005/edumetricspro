@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors
+// // ignore_for_file: prefer_const_constructors
 
 import "package:edumetricspro/components/staff/menuDrawer.dart";
 import "package:edumetricspro/services/students.dart";
@@ -6,9 +6,10 @@ import "package:flutter/material.dart";
 import "package:hive_flutter/hive_flutter.dart";
 import "package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart";
 import "package:shimmer/shimmer.dart";
+import 'package:shared_preferences/shared_preferences.dart';
 
 class StudentTimetable extends StatefulWidget {
-  const StudentTimetable({super.key});
+  const StudentTimetable({Key? key}) : super(key: key);
 
   @override
   State<StudentTimetable> createState() => _StudentTimetableState();
@@ -16,8 +17,7 @@ class StudentTimetable extends StatefulWidget {
 
 class _StudentTimetableState extends State<StudentTimetable> {
   late Map localData;
-  late Box userDataBox;
-  var staffName = '';
+  late String staffName;
   String dropdown = '';
   int dateTimeNow = 0;
   int tempIndex = 0;
@@ -25,11 +25,6 @@ class _StudentTimetableState extends State<StudentTimetable> {
   String studentClass = "";
   int timeTableData_length = 63;
   List<dynamic> timeTableData = [
-    // "Monday",
-    // "Tuesday",
-    // "Wednesday",
-    // "Thursday",
-    // "Friday",
     "08:30 AM - 09:30 AM",
     "Oops",
     "Verbal",
@@ -86,12 +81,12 @@ class _StudentTimetableState extends State<StudentTimetable> {
   }
 
   void getLocalData() async {
-    userDataBox = await Hive.openBox('userData');
+    SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
       dateTimeNow = DateTime.now().weekday;
-      studentClass = userDataBox.get('lectureHall');
+      studentClass = prefs.getString('inClass') ?? "";
       tempIndex = dateTimeNow;
-      staffName = (userDataBox.get('name'));
+      staffName = (prefs.getString('name') ?? "");
     });
     try {
       var tileDataResponse = await get_time_table(studentClass);
@@ -102,18 +97,18 @@ class _StudentTimetableState extends State<StudentTimetable> {
         print(timeTableData_length);
       });
 
-      print("My name: ${userDataBox.get('username')}");
+      print("My name: ${prefs.getString('username')}");
     } catch (e) {
       print("Exception in student.timetable: $e");
     }
 
-    SetTileData(dateTimeNow, timeTableData);
+    setTileData(dateTimeNow, timeTableData);
     setState(() {
       isLoading = false;
     });
   }
 
-  void SetTileData(int today, List<dynamic> tiles) {
+  void setTileData(int today, List<dynamic> tiles) {
     tempIndex = 1;
     print("today: $today; temIndex: $tempIndex");
     for (int i = 0; i < tiles.length; i++) {
@@ -144,9 +139,9 @@ class _StudentTimetableState extends State<StudentTimetable> {
             Navigator.pop(context);
           },
         ),
-        title: Text(
+        title: const Text(
           "Time Table",
-          style: const TextStyle(
+          style: TextStyle(
             fontFamily: 'Poppins',
           ),
         ),
@@ -180,8 +175,9 @@ class _StudentTimetableState extends State<StudentTimetable> {
                   padding: const EdgeInsets.symmetric(vertical: 0.0),
                   child: GridView.builder(
                     itemCount: 35,
-                    padding: EdgeInsets.all(20.0),
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    padding: const EdgeInsets.all(20.0),
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 5,
                       crossAxisSpacing: 6.0,
                       mainAxisSpacing: 6.0,
@@ -193,8 +189,8 @@ class _StudentTimetableState extends State<StudentTimetable> {
                           borderRadius: BorderRadius.circular(5.0),
                           color: Colors.purple,
                         ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(3.0),
+                        child: const Padding(
+                          padding: EdgeInsets.all(3.0),
                           child: Center(
                             child: RotatedBox(
                               quarterTurns: 1,
@@ -229,8 +225,9 @@ class _StudentTimetableState extends State<StudentTimetable> {
                     builder: (context, setState) {
                       return GridView.builder(
                         itemCount: timeTableData.length + 7,
-                        padding: EdgeInsets.all(20.0),
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        padding: const EdgeInsets.all(20.0),
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: 7,
                           crossAxisSpacing: 6.0,
                           mainAxisSpacing: 6.0,
@@ -252,7 +249,7 @@ class _StudentTimetableState extends State<StudentTimetable> {
                                     child: Text(
                                       tileData[index]['period'],
                                       textAlign: TextAlign.center,
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                         fontFamily: 'Poppins',
                                         fontSize: 12.0,
                                       ),

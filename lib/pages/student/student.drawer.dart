@@ -2,8 +2,10 @@ import 'package:edumetricspro/animations/navigationAnimation.dart';
 import 'package:edumetricspro/pages/login/mainLoginPage.dart';
 import 'package:edumetricspro/pages/student/student.timetable.dart';
 import 'package:edumetricspro/services/logout.dart';
+import 'package:edumetricspro/services/services.actions.dart';
+import 'package:edumetricspro/themes/AppConfig.dart';
 import 'package:flutter/material.dart';
-import 'package:hive/hive.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:searchbar_animation/searchbar_animation.dart';
 
 class StudentDrawer extends StatefulWidget {
@@ -17,24 +19,18 @@ class _StudentDrawerState extends State<StudentDrawer> {
   String dropdown = '';
   bool repMode = true;
   String username = 'user';
-  late Box userDataBox;
-  late Box loginDataBox;
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     loadUserData();
   }
 
-  loadUserData() async {
-    userDataBox = await Hive.openBox('userData');
+  Future<void> loadUserData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
-      username = userDataBox.get('name');
-    });
-    loginDataBox = await Hive.openBox('login');
-    setState(() {
-      repMode = userDataBox.get('isRep');
+      username = prefs.getString('name') ?? 'user';
+      repMode = prefs.getBool('isRep') ?? true;
     });
   }
 
@@ -53,23 +49,6 @@ class _StudentDrawerState extends State<StudentDrawer> {
               color: Colors.black87,
             ),
             Menu(),
-            // SearchBarAnimation(
-            //   textEditingController: SearchTextEditController,
-            //   isOriginalAnimation: false,
-            //   trailingWidget: const Icon(Icons.search),
-            //   secondaryButtonWidget: const Icon(Icons.search_off),
-            //   buttonColour: Colors.amber,
-            //   buttonBorderColour: Colors.green,
-            //   buttonElevation: 0,
-            //   buttonShadowColour: Colors.blue,
-            //   cursorColour: Colors.deepOrange,
-            //   durationInMilliSeconds: 200,
-            //   buttonWidget: const Icon(Icons.search),
-            //   onFieldSubmitted: (String value) {
-            //     print("Value: $value");
-            //     print(SearchTextEditController.text);
-            //   },
-            // ),
           ],
         ),
       ),
@@ -93,11 +72,6 @@ class _StudentDrawerState extends State<StudentDrawer> {
                   "assets/home/student/profile.png",
                   width: 50,
                 ),
-                // Container(
-                //   height: 10,
-                //   width: double.maxFinite,
-                //   color: Colors.black26,
-                // )
               ],
             ),
           )
@@ -143,7 +117,6 @@ class _StudentDrawerState extends State<StudentDrawer> {
                     "Change Password",
                     style: TextStyle(
                       color: Color.fromRGBO(255, 255, 255, .5),
-                      // backgroundColor: Color.fromRGBO(50, 50, 50, 1),
                     ),
                   ),
                 ),
@@ -158,7 +131,6 @@ class _StudentDrawerState extends State<StudentDrawer> {
                     "Edit Profile",
                     style: TextStyle(
                       color: Color.fromRGBO(255, 255, 255, .5),
-                      // backgroundColor: Color.fromRGBO(50, 50, 50, 1),
                     ),
                   ),
                 ),
@@ -173,7 +145,6 @@ class _StudentDrawerState extends State<StudentDrawer> {
                     "Change Profile Picture",
                     style: TextStyle(
                       color: Color.fromRGBO(255, 255, 255, .5),
-                      // backgroundColor: Color.fromRGBO(50, 50, 50, 1),
                     ),
                   ),
                 ),
@@ -195,18 +166,6 @@ class _StudentDrawerState extends State<StudentDrawer> {
               child: Text("Time Table"),
             ),
           ),
-          // TextButton(
-          //   style: ButtonStyle(
-          //     shape: MaterialStateProperty.all<OutlinedBorder>(
-          //       const BeveledRectangleBorder(),
-          //     ),
-          //   ),
-          //   onPressed: () {},
-          //   child: const Padding(
-          //     padding: EdgeInsets.symmetric(vertical: 10.0),
-          //     child: Text("View Current Slot"),
-          //   ),
-          // ),
           if (repMode)
             TextButton(
               style: ButtonStyle(
@@ -232,7 +191,11 @@ class _StudentDrawerState extends State<StudentDrawer> {
             ),
           IconButton(
             tooltip: "Log out",
-            onPressed: () => Logout.logout(context),
+            onPressed: () {
+              AuthService serv = AuthService(AppConfig.backendUrl);
+              serv.logout();
+              Logout.logout(context);
+            },
             icon: const Icon(Icons.logout),
           )
         ],

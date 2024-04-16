@@ -6,6 +6,7 @@ import 'package:edumetricspro/pages/student/student.markSheet.dart';
 import 'package:edumetricspro/pages/student/student.timetable.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class StudentHome extends StatefulWidget {
   const StudentHome({super.key});
@@ -26,9 +27,9 @@ class _StudentHomeState extends State<StudentHome> {
   }
 
   void getLocalData() async {
-    userDataBox = await Hive.openBox('userData');
+    final prefs = await SharedPreferences.getInstance();
     setState(() {
-      studentName = userDataBox.get('name');
+      studentName = prefs.getString('name') ?? "";
     });
   }
 

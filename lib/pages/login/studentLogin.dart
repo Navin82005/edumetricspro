@@ -3,6 +3,7 @@
 import 'package:edumetricspro/components/FontStyles.dart';
 import 'package:edumetricspro/pages/home/studentHome.dart';
 import 'package:edumetricspro/services/auth.dart';
+import 'package:edumetricspro/services/services.actions.dart';
 import 'package:edumetricspro/themes/AppConfig.dart';
 import 'package:edumetricspro/themes/LoginPageColors.dart';
 import 'package:flutter/material.dart';
@@ -270,21 +271,23 @@ class _StudentLoginState extends State<StudentLogin> {
                                     loading = true;
                                   });
 
-                                  Map response = await AuthLogin.login(
-                                      'student', studentEmail, studentPassword);
-                                  print(
-                                      "Student Login File: $response Status: ${response['status'] == 200}");
-                                  if (response['status'] == 204) {
-                                    setState(() {
-                                      error = true;
-                                    });
-                                  } else if (response['status'] == 401) {
+                                  AuthService service =
+                                      AuthService(AppConfig.backendUrl);
+
+                                  Map response = await service.login(
+                                      studentEmail, studentPassword);
+                                  print(response);
+
+                                  print(await service.checkAuthenticated());
+                                  print(await service.getUserData());
+
+                                  if (response['success'] == false) {
                                     setState(() {
                                       error = false;
                                       isUserPasswordValid = isUserValid = false;
                                     });
                                   }
-                                  if (response['status'] == 200) {
+                                  if (response['success'] == true) {
                                     Navigator.pop(context);
                                     Navigator.pop(context);
                                     Navigator.push(
