@@ -42,9 +42,29 @@ Edu Matrics Pro is an institutional application designed to maintain student mar
    cd edu-matrics-pro/backend
   
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
-
 # The Template Image of the Application
 ![Banner Image](https://github.com/Navin82005/edumetricspro/blob/main/LinkedIn%20Post%201.png)
+
+**Usage**
+Run the backend server using Django.
+Run the Flutter application on your preferred device or emulator.
+Log in as a student or staff user to access the respective features.
+Screenshots
+Login Screen
+
+Student Dashboard
+
+Staff Dashboard
+
+Attendance Management
+
+Timetable View
+
+Contributing
+Contributions are welcome! Please fork the repository and create a pull request with your changes.
+
+Fork the Project
+Create your Feature Branch (git checkout -b feature/AmazingFeature)
+Commit your Changes (git commit -m 'Add some AmazingFeature')
+Push to the Branch (git push origin feature/AmazingFeature)
+Open a Pull Request
