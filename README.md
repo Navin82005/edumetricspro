@@ -1,70 +1,54 @@
 # Edu Matrics Pro
 
-Edu Matrics Pro is an institutional application designed to maintain student marks and attendance. It allows students and staff to manage and view academic information in real-time.
+Edu Matrics Pro is an institutional application designed to maintain and manage student marks and attendance in real-time. It offers distinct functionalities for students, staff, and admin users, ensuring an organized and efficient system for educational institutions.
 
 ## Table of Contents
-
 - [Features](#features)
-- [Technologies Used](#technologies-used)
-- [Installation](#installation)
+- [User Roles](#user-roles)
+- [Technical Stack](#technical-stack)
 - [Usage](#usage)
 - [Screenshots](#screenshots)
 - [Contributing](#contributing)
 - [License](#license)
 
 ## Features
+- **Real-time Attendance Update**: Attendance is updated hour after hour.
+- **Marks Display**: Shows both internal and semester results for students.
+- **Timetable Management**: Both students and staff can view their timetables.
+- **Notifications**: Staff receive notifications to go to their particular classes.
 
-- **Student Login:** Students can log in to the application under their respective institutions.
-- **Internal and Semester Results:** Students can view their internal and semester results.
-- **Real-time Attendance:** Students can monitor their attendance percentage, which gets updated in real-time.
-- **Staff Management:** Staff users can manage the attendance for their subjects and view their timetables.
-- **Notifications:** Staff users receive notifications to attend their particular classes.
-- **Timetable:** Both students and staff can view their timetables within the app.
+## User Roles
+### Student User
+- Login under their respective institutions.
+- View internal and semester results.
+- Monitor real-time updated attendance.
+- View timetable.
 
-## Technologies Used
+### Staff User
+- Manage attendance for their respective subjects.
+- View timetable.
+- Receive class notifications.
 
-- **Frontend:** Flutter
-- **Backend:** Django
+### Admin User
+- Authorised institutional head.
+- Upload and maintain overall data in the database.
+- Update all user data.
+- Provide staff users (tutors) with access to manage student data.
 
-## Installation
+## Technical Stack
+- **Frontend**: Flutter
+- **Backend**: Django
 
-### Prerequisites
+## Usage
+1. **Student User**: Login to view your marks, attendance, and timetable.
+2. **Staff User**: Login to manage attendance, view your timetable, and receive class notifications.
+3. **Admin User**: Login to manage the overall data and provide necessary access to staff users.
 
-- Flutter SDK: [Install Flutter](https://flutter.dev/docs/get-started/install)
-- Django: [Install Django](https://docs.djangoproject.com/en/stable/topics/install/)
-- Python: Ensure Python is installed on your system
-
-### Backend Setup
-
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/your-username/edu-matrics-pro.git
-   cd edu-matrics-pro/backend
-  
-
-# The Template Image of the Application
+## Screenshots
 ![Banner Image](https://github.com/Navin82005/edumetricspro/blob/main/LinkedIn%20Post%201.png)
 
-**Usage**
-Run the backend server using Django.
-Run the Flutter application on your preferred device or emulator.
-Log in as a student or staff user to access the respective features.
-Screenshots
-Login Screen
+## Contributing
+Contributions are welcome! Please open an issue or submit a pull request for any improvements or bug fixes.
 
-Student Dashboard
-
-Staff Dashboard
-
-Attendance Management
-
-Timetable View
-
-Contributing
-Contributions are welcome! Please fork the repository and create a pull request with your changes.
-
-Fork the Project
-Create your Feature Branch (git checkout -b feature/AmazingFeature)
-Commit your Changes (git commit -m 'Add some AmazingFeature')
-Push to the Branch (git push origin feature/AmazingFeature)
-Open a Pull Request
+## License
+This project is licensed under the MIT License.
