@@ -53,3 +53,5 @@ Feel free to contact me through [LinkedIn](https://www.linkedin.com/in/naveenn82
 
 ## License 📝
 This project is licensed under the MIT License.
+
+Get your own color pallate at : [Coolors.Co](https://coolors.co/?ref=6559c82241a7a6000bf5e09a)
