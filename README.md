@@ -2,15 +2,6 @@
 
 Edu Matrics Pro is an institutional application designed to maintain and manage student marks and attendance in real-time. It offers distinct functionalities for students, staff, and admin users, ensuring an organized and efficient system for educational institutions. 🚀
 
-## Table of Contents
-- [Features](#features)
-- [User Roles](#user-roles)
-- [Technical Stack](#technical-stack)
-- [Usage](#usage)
-- [Screenshots](#screenshots)
-- [Contributing](#contributing)
-- [License](#license)
-
 ## Features ✨
 - **Real-time Attendance Update**: Attendance is updated hour after hour. ⏰
 - **Marks Display**: Shows both internal and semester results for students. 📈
