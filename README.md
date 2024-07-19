@@ -47,6 +47,10 @@ Edu Matrics Pro is an institutional application designed to maintain and manage 
 ## Screenshots 📸
 ![Banner Image](https://github.com/Navin82005/edumetricspro/blob/main/LinkedIn%20Post%201.png)
 
+## Project Documents
+ - FrontEnd : [EdumatricsPro](https://github.com/Navin82005/edumetricspro)
+ - BackEnd : [EdumatricsPro - BackEnd](https://github.com/Navin82005/Edumatrics-backend)
+
 ## Feedback and Contributing 🤝
 Contributions are welcome! Please open an issue or submit a pull request for any improvements or bug fixes. 💬
 Feel free to contact me through [LinkedIn](https://www.linkedin.com/in/naveenn82005) or via email at [navin82005@gmail.com](mailto:navin82005@gmail.com).
