@@ -50,5 +50,5 @@ Feel free to contact me through [LinkedIn](https://www.linkedin.com/in/naveenn82
 This project is licensed under the MIT License.
 
 ![Alt](https://repobeats.axiom.co/api/embed/4f984d6bea33b0b8fdd633171c0c703c0dba48a1.svg "Repobeats analytics image")
-
+--
 Get your own color pallate at : [Coolors.Co](https://coolors.co/?ref=6559c82241a7a6000bf5e09a)
